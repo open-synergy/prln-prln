@@ -1,0 +1,883 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pending_order_report_by_customer" language="groovy" pageWidth="842" pageHeight="595" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true">
+	<property name="ireport.zoom" value="2.8531167061100082"/>
+	<property name="ireport.x" value="255"/>
+	<property name="ireport.y" value="105"/>
+	<style name="0" isBlankWhenNull="true"/>
+	<style name="1" style="0" fontSize="10" isBold="true">
+		<box bottomPadding="20"/>
+	</style>
+	<style name="2" style="0" hAlign="Left" vAlign="Top" fontSize="8">
+		<box leftPadding="1" rightPadding="1"/>
+	</style>
+	<style name="2.1" style="2" isBold="true">
+		<box>
+			<topPen lineWidth="0.2"/>
+			<leftPen lineWidth="0.2"/>
+			<bottomPen lineWidth="0.2"/>
+		</box>
+	</style>
+	<style name="2.1.1" style="2.1" hAlign="Center">
+		<box>
+			<topPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="2.1.1.1" style="2.1.1" hAlign="Right"/>
+	<style name="2.1.2" style="2.1" hAlign="Right">
+		<box>
+			<leftPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="2.1.3" style="2.1" hAlign="Center"/>
+	<style name="2.2" style="2" hAlign="Right"/>
+	<style name="2.2.1" style="2.2">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{sol_qty} == null]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="2.3" style="2" hAlign="Right" isBold="true">
+		<box>
+			<topPen lineWidth="0.2"/>
+			<bottomPen lineWidth="0.2"/>
+		</box>
+	</style>
+	<style name="2.3.1" style="2.3" hAlign="Left"/>
+	<style name="2.4" style="2">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{sol_qty} == null]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="99" style="0" vAlign="Bottom" fontSize="6"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="STOPWATCH" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[(new java.net.URLClassLoader(
+    ([new java.net.URL("file://" + $P{SUBREPORT_DIR})]
+    ).toArray(new java.net.URL[0]), getClass().getClassLoader()
+)).loadClass("Stopwatch").newInstance().start()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="VCD" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[(new java.net.URLClassLoader(
+    ([new java.net.URL("file://" + $P{SUBREPORT_DIR})]
+    ).toArray(new java.net.URL[0]), getClass().getClassLoader()
+)).loadClass("ValueChangeDetector").newInstance()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SHOW_STOPWATCH" class="java.lang.Boolean"/>
+	<parameter name="OERP_USER" class="java.lang.String"/>
+	<parameter name="COMPANY_NAME" class="java.lang.String"/>
+	<parameter name="COMPANY_IDS" class="java.lang.String"/>
+	<parameter name="CUSTOMER_IDS" class="java.lang.String"/>
+	<parameter name="DATE_FORMAT_STRING_DEFAULT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["d MMM yyyy"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_FORMATTER_DEFAULT" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.text.SimpleDateFormat($P{DATE_FORMAT_STRING_DEFAULT})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_FORMAT_STRING_TIME_DEFAULT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{DATE_FORMAT_STRING_DEFAULT} + " HH:mm:ss"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_FORMATTER_TIME_DEFAULT" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.text.SimpleDateFormat($P{DATE_FORMAT_STRING_TIME_DEFAULT})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DECIMAL_FORMAT_STRING_DEFAULT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["#,##0.00;-#,##0.00"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DECIMAL_ROUNDING_MODE_DEFAULT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["HALF_UP"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DECIMAL_FORMATTER_DEFAULT" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.text.DecimalFormat($P{DECIMAL_FORMAT_STRING_DEFAULT})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TODAY" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="distinct_count-global-cust_count" class="java.util.List" isForPrompting="false">
+		<defaultValueExpression><![CDATA[[0]]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FROM_DATE_2_YR" class="java.lang.Integer"/>
+	<parameter name="FROM_DATE_2_MO" class="java.lang.Integer"/>
+	<parameter name="FROM_DATE_2_DY" class="java.lang.Integer"/>
+	<parameter name="TO_DATE_2_YR" class="java.lang.Integer"/>
+	<parameter name="TO_DATE_2_MO" class="java.lang.Integer"/>
+	<parameter name="TO_DATE_2_DY" class="java.lang.Integer"/>
+	<parameter name="FROM_DATE_2" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date($P{FROM_DATE_2_YR} - 1900 , $P{FROM_DATE_2_MO} - 1, $P{FROM_DATE_2_DY})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TO_DATE_2" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date($P{TO_DATE_2_YR} - 1900 , $P{TO_DATE_2_MO} - 1, $P{TO_DATE_2_DY})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SETTERS" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{DECIMAL_FORMATTER_DEFAULT}.setRoundingMode(java.math.RoundingMode.valueOf($P{DECIMAL_ROUNDING_MODE_DEFAULT})) == null
+/* Further setter can be added by this pattern: && $P{DECIMAL_FORMATTER_DEFAULT}.setXXX() == null */
+? null
+: null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PRINTED_PAGE_FOOTER" class="java.util.Collection" isForPrompting="false">
+		<defaultValueExpression><![CDATA[[]]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[-- We are interested only in sale order line (SOL) with a stock move
+-- that is pending.  There is a rule concerning SOL product (S),
+-- pending stock move product (P), and delivered stock move product (D).
+
+-- S = P | S = D | P = D
+-- T     | T     | T (this is normal case, one line): Case A
+--                   P1 P1 P1 (Pattern 1)
+-- T     | T     | F (impossible)
+-- T     | F     | T (impossible)
+-- T     | F     | F (this will display two lines): Case B
+--                   P1 P1    (Pattern 2)
+--                         P2 (Pattern 3)
+-- F     | T     | T (impossible)
+-- F     | T     | F (this will display two lines): Case C
+--                   P1    P1 (Pattern 4)
+--                      P2    (Pattern 5)
+-- F     | F     | T (this will display two lines): Case D
+--                   P1       (Pattern 6)
+--                      P2 P2 (Pattern 7)
+-- F     | F     | F (this will display three lines): Case E
+--                   P1       (Pattern 6)
+--                      P2    (Pattern 5)
+--                         P3 (Pattern 3)
+
+-- There are seven patterns in total.
+
+-- Because there is no point of showing a SOL or a delivery without
+-- any left over, we are only interested in Pattern 1, Pattern 2,
+-- Pattern 5, Pattern 7.
+
+SELECT
+ *
+FROM
+(
+ (-- Case A with select clause producing Pattern 1
+  SELECT
+   rp.name AS cust_name,
+   so.name AS so_no,
+   p.name_template AS prod,
+   so.date_confirm AS so_date,
+   pending_sm.sched_date AS expected_date,
+   sol.product_uom_qty AS sol_qty,
+   pu.name AS sol_uom,
+   sol.product_uom_qty * pt.weight_net AS sol_weight,
+   pending_sm.qty AS do_pend_qty,
+   pending_sm_uom.name AS do_pend_uom,
+   pending_sm.qty * pending_sm_pt.weight_net AS do_pend_weight,
+   delivered_sm.qty AS do_done_qty,
+   delivered_sm_uom.name AS do_done_uom,
+   delivered_sm.qty * delivered_sm_pt.weight_net AS do_done_weight
+  FROM sale_order so
+   INNER JOIN res_partner rp
+    ON so.partner_id = rp.id
+   INNER JOIN sale_order_line sol
+    ON so.id = sol.order_id
+   INNER JOIN product_product p
+    ON sol.product_id = p.id
+   INNER JOIN product_template pt
+    ON p.product_tmpl_id = pt.id
+   INNER JOIN product_uom pu
+    ON sol.product_uom = pu.id
+   INNER JOIN (
+     SELECT
+      sm.sale_line_id AS sol_id,
+      sm.product_id AS prod_id,
+      sm.product_uom AS uom_id,
+      SUM(sm.product_qty) AS qty,
+      MAX(DATE_TRUNC('day', date_expected)) AS sched_date
+     FROM stock_move sm
+     WHERE sm.state IN ('confirmed', 'assigned')
+     GROUP BY
+      sm.sale_line_id,
+      sm.product_id,
+      sm.product_uom
+    ) pending_sm
+    ON sol.id = pending_sm.sol_id
+   INNER JOIN product_uom pending_sm_uom
+    ON pending_sm_uom.id = pending_sm.uom_id
+   INNER JOIN product_product pending_sm_p
+    ON pending_sm_p.id = pending_sm.prod_id
+   INNER JOIN product_template pending_sm_pt
+    ON pending_sm_pt.id = pending_sm_p.product_tmpl_id
+   LEFT JOIN (
+     SELECT
+      sm.sale_line_id AS sol_id,
+      sm.product_id AS prod_id,
+      sm.product_uom AS uom_id,
+      SUM(sm.product_qty) AS qty
+     FROM stock_move sm
+     WHERE sm.state = 'done'
+     GROUP BY
+      sm.sale_line_id,
+      sm.product_id,
+      sm.product_uom
+    ) delivered_sm
+    ON sol.id = delivered_sm.sol_id
+   LEFT JOIN product_uom delivered_sm_uom
+    ON delivered_sm_uom.id = delivered_sm.uom_id
+   LEFT JOIN product_product delivered_sm_p
+    ON delivered_sm_p.id = delivered_sm.prod_id
+   LEFT JOIN product_template delivered_sm_pt
+    ON delivered_sm_pt.id = delivered_sm_p.product_tmpl_id
+  WHERE
+   so.state NOT IN ('draft', 'cancel', 'done')
+   AND (sol.product_id = pending_sm.prod_id
+	AND sol.product_id = delivered_sm.prod_id
+	AND pending_sm.prod_id = delivered_sm.prod_id) -- Case A
+   AND so.date_confirm
+    BETWEEN '$P!{FROM_DATE_2_YR}-$P!{FROM_DATE_2_MO}-$P!{FROM_DATE_2_DY}'
+     AND '$P!{TO_DATE_2_YR}-$P!{TO_DATE_2_MO}-$P!{TO_DATE_2_DY}'
+   AND rp.id IN ($P!{CUSTOMER_IDS})
+   AND so.company_id IN ($P!{COMPANY_IDS})
+ )
+ UNION ALL
+ (-- Case B with select clause producing Pattern 2
+  SELECT
+   rp.name AS cust_name,
+   so.name AS so_no,
+   p.name_template AS prod,
+   so.date_confirm AS so_date,
+   pending_sm.sched_date AS expected_date,
+   sol.product_uom_qty AS sol_qty,
+   pu.name AS sol_uom,
+   sol.product_uom_qty * pt.weight_net AS sol_weight,
+   pending_sm.qty AS do_pend_qty,
+   pending_sm_uom.name AS do_pend_uom,
+   pending_sm.qty * pending_sm_pt.weight_net AS do_pend_weight,
+   NULL AS do_done_qty,
+   NULL AS do_done_uom,
+   NULL AS do_done_weight
+  FROM sale_order so
+   INNER JOIN res_partner rp
+    ON so.partner_id = rp.id
+   INNER JOIN sale_order_line sol
+    ON so.id = sol.order_id
+   INNER JOIN product_product p
+    ON sol.product_id = p.id
+   INNER JOIN product_template pt
+    ON p.product_tmpl_id = pt.id
+   INNER JOIN product_uom pu
+    ON sol.product_uom = pu.id
+   INNER JOIN (
+     SELECT
+      sm.sale_line_id AS sol_id,
+      sm.product_id AS prod_id,
+      sm.product_uom AS uom_id,
+      SUM(sm.product_qty) AS qty,
+      MAX(DATE_TRUNC('day', date_expected)) AS sched_date
+     FROM stock_move sm
+     WHERE sm.state IN ('confirmed', 'assigned')
+     GROUP BY
+      sm.sale_line_id,
+      sm.product_id,
+      sm.product_uom
+    ) pending_sm
+    ON sol.id = pending_sm.sol_id
+   INNER JOIN product_uom pending_sm_uom
+    ON pending_sm_uom.id = pending_sm.uom_id
+   INNER JOIN product_product pending_sm_p
+    ON pending_sm_p.id = pending_sm.prod_id
+   INNER JOIN product_template pending_sm_pt
+    ON pending_sm_pt.id = pending_sm_p.product_tmpl_id
+   LEFT JOIN (
+     SELECT
+      sm.sale_line_id AS sol_id,
+      sm.product_id AS prod_id,
+      sm.product_uom AS uom_id,
+      SUM(sm.product_qty) AS qty
+     FROM stock_move sm
+     WHERE sm.state = 'done'
+     GROUP BY
+      sm.sale_line_id,
+      sm.product_id,
+      sm.product_uom
+    ) delivered_sm
+    ON sol.id = delivered_sm.sol_id
+   LEFT JOIN product_uom delivered_sm_uom
+    ON delivered_sm_uom.id = delivered_sm.uom_id
+   LEFT JOIN product_product delivered_sm_p
+    ON delivered_sm_p.id = delivered_sm.prod_id
+   LEFT JOIN product_template delivered_sm_pt
+    ON delivered_sm_pt.id = delivered_sm_p.product_tmpl_id
+  WHERE
+   so.state NOT IN ('draft', 'cancel', 'done')
+   AND (sol.product_id = pending_sm.prod_id
+	AND (delivered_sm.prod_id IS NULL
+	     OR (sol.product_id != delivered_sm.prod_id
+		 AND pending_sm.prod_id != delivered_sm.prod_id))) -- Case B
+   AND so.date_confirm
+    BETWEEN '$P!{FROM_DATE_2_YR}-$P!{FROM_DATE_2_MO}-$P!{FROM_DATE_2_DY}'
+     AND '$P!{TO_DATE_2_YR}-$P!{TO_DATE_2_MO}-$P!{TO_DATE_2_DY}'
+   AND rp.id IN ($P!{CUSTOMER_IDS})
+   AND so.company_id IN ($P!{COMPANY_IDS})
+ )
+ UNION ALL
+ (-- Case C and Case E with select clause producing Pattern 5
+  SELECT
+   rp.name AS cust_name,
+   so.name AS so_no,
+   pending_sm_p.name_template AS prod,
+   so.date_confirm AS so_date,
+   pending_sm.sched_date AS expected_date,
+   NULL AS sol_qty,
+   NULL AS sol_uom,
+   NULL AS sol_weight,
+   pending_sm.qty AS do_pend_qty,
+   pending_sm_uom.name AS do_pend_uom,
+   pending_sm.qty * pending_sm_pt.weight_net AS do_pend_weight,
+   NULL AS do_done_qty,
+   NULL AS do_done_uom,
+   NULL AS do_done_weight
+  FROM sale_order so
+   INNER JOIN res_partner rp
+    ON so.partner_id = rp.id
+   INNER JOIN sale_order_line sol
+    ON so.id = sol.order_id
+   INNER JOIN product_product p
+    ON sol.product_id = p.id
+   INNER JOIN product_template pt
+    ON p.product_tmpl_id = pt.id
+   INNER JOIN product_uom pu
+    ON sol.product_uom = pu.id
+   INNER JOIN (
+     SELECT
+      sm.sale_line_id AS sol_id,
+      sm.product_id AS prod_id,
+      sm.product_uom AS uom_id,
+      SUM(sm.product_qty) AS qty,
+      MAX(DATE_TRUNC('day', date_expected)) AS sched_date
+     FROM stock_move sm
+     WHERE sm.state IN ('confirmed', 'assigned')
+     GROUP BY
+      sm.sale_line_id,
+      sm.product_id,
+      sm.product_uom
+    ) pending_sm
+    ON sol.id = pending_sm.sol_id
+   INNER JOIN product_uom pending_sm_uom
+    ON pending_sm_uom.id = pending_sm.uom_id
+   INNER JOIN product_product pending_sm_p
+    ON pending_sm_p.id = pending_sm.prod_id
+   INNER JOIN product_template pending_sm_pt
+    ON pending_sm_pt.id = pending_sm_p.product_tmpl_id
+   LEFT JOIN (
+     SELECT
+      sm.sale_line_id AS sol_id,
+      sm.product_id AS prod_id,
+      sm.product_uom AS uom_id,
+      SUM(sm.product_qty) AS qty
+     FROM stock_move sm
+     WHERE sm.state = 'done'
+     GROUP BY
+      sm.sale_line_id,
+      sm.product_id,
+      sm.product_uom
+    ) delivered_sm
+    ON sol.id = delivered_sm.sol_id
+   LEFT JOIN product_uom delivered_sm_uom
+    ON delivered_sm_uom.id = delivered_sm.uom_id
+   LEFT JOIN product_product delivered_sm_p
+    ON delivered_sm_p.id = delivered_sm.prod_id
+   LEFT JOIN product_template delivered_sm_pt
+    ON delivered_sm_pt.id = delivered_sm_p.product_tmpl_id
+  WHERE
+   so.state NOT IN ('draft', 'cancel', 'done')
+   AND ((sol.product_id != pending_sm.prod_id
+	 AND (delivered_sm.prod_id IS NOT NULL
+	      AND sol.product_id = delivered_sm.prod_id)
+	 AND (delivered_sm.prod_id IS NULL
+	      OR pending_sm.prod_id != delivered_sm.prod_id)) -- Case C
+	OR (sol.product_id != pending_sm.prod_id
+	    AND (delivered_sm.prod_id IS NULL
+		 OR (sol.product_id != delivered_sm.prod_id
+		     AND pending_sm.prod_id != delivered_sm.prod_id)))) -- Case E
+   AND so.date_confirm
+    BETWEEN '$P!{FROM_DATE_2_YR}-$P!{FROM_DATE_2_MO}-$P!{FROM_DATE_2_DY}'
+     AND '$P!{TO_DATE_2_YR}-$P!{TO_DATE_2_MO}-$P!{TO_DATE_2_DY}'
+   AND rp.id IN ($P!{CUSTOMER_IDS})
+   AND so.company_id IN ($P!{COMPANY_IDS})
+ )
+ UNION ALL
+ (-- Case D with select clause producing Pattern 7
+  SELECT
+   rp.name AS cust_name,
+   so.name AS so_no,
+   pending_sm_p.name_template AS prod,
+   so.date_confirm AS so_date,
+   pending_sm.sched_date AS expected_date,
+   NULL AS sol_qty,
+   NULL AS sol_uom,
+   NULL AS sol_weight,
+   pending_sm.qty AS do_pend_qty,
+   pending_sm_uom.name AS do_pend_uom,
+   pending_sm.qty * pending_sm_pt.weight_net AS do_pend_weight,
+   delivered_sm.qty AS do_done_qty,
+   delivered_sm_uom.name AS do_done_uom,
+   delivered_sm.qty * delivered_sm_pt.weight_net AS do_done_weight
+  FROM sale_order so
+   INNER JOIN res_partner rp
+    ON so.partner_id = rp.id
+   INNER JOIN sale_order_line sol
+    ON so.id = sol.order_id
+   INNER JOIN product_product p
+    ON sol.product_id = p.id
+   INNER JOIN product_template pt
+    ON p.product_tmpl_id = pt.id
+   INNER JOIN product_uom pu
+    ON sol.product_uom = pu.id
+   INNER JOIN (
+     SELECT
+      sm.sale_line_id AS sol_id,
+      sm.product_id AS prod_id,
+      sm.product_uom AS uom_id,
+      SUM(sm.product_qty) AS qty,
+      MAX(DATE_TRUNC('day', date_expected)) AS sched_date
+     FROM stock_move sm
+     WHERE sm.state IN ('confirmed', 'assigned')
+     GROUP BY
+      sm.sale_line_id,
+      sm.product_id,
+      sm.product_uom
+    ) pending_sm
+    ON sol.id = pending_sm.sol_id
+   INNER JOIN product_uom pending_sm_uom
+    ON pending_sm_uom.id = pending_sm.uom_id
+   INNER JOIN product_product pending_sm_p
+    ON pending_sm_p.id = pending_sm.prod_id
+   INNER JOIN product_template pending_sm_pt
+    ON pending_sm_pt.id = pending_sm_p.product_tmpl_id
+   LEFT JOIN (
+     SELECT
+      sm.sale_line_id AS sol_id,
+      sm.product_id AS prod_id,
+      sm.product_uom AS uom_id,
+      SUM(sm.product_qty) AS qty
+     FROM stock_move sm
+     WHERE sm.state = 'done'
+     GROUP BY
+      sm.sale_line_id,
+      sm.product_id,
+      sm.product_uom
+    ) delivered_sm
+    ON sol.id = delivered_sm.sol_id
+   LEFT JOIN product_uom delivered_sm_uom
+    ON delivered_sm_uom.id = delivered_sm.uom_id
+   LEFT JOIN product_product delivered_sm_p
+    ON delivered_sm_p.id = delivered_sm.prod_id
+   LEFT JOIN product_template delivered_sm_pt
+    ON delivered_sm_pt.id = delivered_sm_p.product_tmpl_id
+  WHERE
+   so.state NOT IN ('draft', 'cancel', 'done')
+   AND ((sol.product_id != pending_sm.prod_id
+	 AND (delivered_sm.prod_id IS NULL
+	      OR sol.product_id != delivered_sm.prod_id)
+	 AND (delivered_sm.prod_id IS NOT NULL
+	      AND pending_sm.prod_id = delivered_sm.prod_id))) -- Case D
+   AND so.date_confirm
+    BETWEEN '$P!{FROM_DATE_2_YR}-$P!{FROM_DATE_2_MO}-$P!{FROM_DATE_2_DY}'
+     AND '$P!{TO_DATE_2_YR}-$P!{TO_DATE_2_MO}-$P!{TO_DATE_2_DY}'
+   AND rp.id IN ($P!{CUSTOMER_IDS})
+   AND so.company_id IN ($P!{COMPANY_IDS})
+ )
+) t
+ORDER BY
+   cust_name,
+   so_no,
+   so_date,
+   prod
+]]>
+	</queryString>
+	<field name="cust_name" class="java.lang.String"/>
+	<field name="so_no" class="java.lang.String"/>
+	<field name="so_date" class="java.util.Date"/>
+	<field name="expected_date" class="java.util.Date"/>
+	<field name="prod" class="java.lang.String"/>
+	<field name="sol_qty" class="java.math.BigDecimal"/>
+	<field name="sol_uom" class="java.lang.String"/>
+	<field name="sol_weight" class="java.math.BigDecimal"/>
+	<field name="do_done_qty" class="java.math.BigDecimal"/>
+	<field name="do_done_uom" class="java.lang.String"/>
+	<field name="do_done_weight" class="java.math.BigDecimal"/>
+	<field name="do_pend_qty" class="java.math.BigDecimal"/>
+	<field name="do_pend_uom" class="java.lang.String"/>
+	<field name="do_pend_weight" class="java.math.BigDecimal"/>
+	<variable name="distinct_count-global-cust_count" class="java.lang.Integer">
+		<variableExpression><![CDATA[$P{VCD}.detectChange("distinct_count-global-cust_count", $F{cust_name})
+? $P{distinct_count-global-cust_count}.add($P{distinct_count-global-cust_count}.remove(0) + 1)
+: $P{distinct_count-global-cust_count}]]></variableExpression>
+	</variable>
+	<variable name="sum-cust_name-sol_qty" class="java.math.BigDecimal" resetType="Group" resetGroup="cust_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{sol_qty}]]></variableExpression>
+	</variable>
+	<variable name="sum-cust_name-sol_weight" class="java.math.BigDecimal" resetType="Group" resetGroup="cust_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{sol_weight}]]></variableExpression>
+	</variable>
+	<variable name="sum-cust_name-do_done_qty" class="java.math.BigDecimal" resetType="Group" resetGroup="cust_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{do_done_qty}]]></variableExpression>
+	</variable>
+	<variable name="sum-cust_name-do_done_weight" class="java.math.BigDecimal" resetType="Group" resetGroup="cust_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{do_done_weight}]]></variableExpression>
+	</variable>
+	<variable name="sum-cust_name-do_pend_qty" class="java.math.BigDecimal" resetType="Group" resetGroup="cust_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{do_pend_qty}]]></variableExpression>
+	</variable>
+	<variable name="sum-cust_name-do_pend_weight" class="java.math.BigDecimal" resetType="Group" resetGroup="cust_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{do_pend_weight}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-sol_qty" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{sol_qty}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-sol_weight" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{sol_weight}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-do_done_qty" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{do_done_qty}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-do_done_weight" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{do_done_weight}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-do_pend_qty" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{do_pend_qty}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-do_pend_weight" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{do_pend_weight}]]></variableExpression>
+	</variable>
+	<group name="global" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[true]]></groupExpression>
+		<groupFooter>
+			<band height="20">
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="0" y="10" width="231" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3.1" stretchType="RelativeToTallestObject" x="231" y="10" width="107" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA["Grand Total"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="338" y="10" width="69" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($V{sum-global-sol_qty} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-sol_qty}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="407" y="10" width="35" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="442" y="10" width="55" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($V{sum-global-sol_weight} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-sol_weight}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="497" y="10" width="63" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($V{sum-global-do_done_qty} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-do_done_qty}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="560" y="10" width="35" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="595" y="10" width="55" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($V{sum-global-do_done_weight} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-do_done_weight}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="650" y="10" width="62" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($V{sum-global-do_pend_qty} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-do_pend_qty}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="712" y="10" width="35" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="747" y="10" width="55" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($V{sum-global-do_pend_weight} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-do_pend_weight}))]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="cust_name" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{cust_name}]]></groupExpression>
+		<groupHeader>
+			<band height="10">
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2" stretchType="RelativeToTallestObject" x="0" y="0" width="18" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$P{distinct_count-global-cust_count}.get(0)]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2" stretchType="RelativeToTallestObject" x="18" y="0" width="784" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{cust_name}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="10">
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="0" y="0" width="231" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3.1" stretchType="RelativeToTallestObject" x="231" y="0" width="107" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA["Sub Total"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="338" y="0" width="69" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($V{sum-cust_name-sol_qty} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-cust_name-sol_qty}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="407" y="0" width="35" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="442" y="0" width="55" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($V{sum-cust_name-sol_weight} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-cust_name-sol_weight}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="497" y="0" width="63" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($V{sum-cust_name-do_done_qty} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-cust_name-do_done_qty}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="560" y="0" width="35" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="595" y="0" width="55" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($V{sum-cust_name-do_done_weight} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-cust_name-do_done_weight}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="650" y="0" width="62" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($V{sum-cust_name-do_pend_qty} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-cust_name-do_pend_qty}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="712" y="0" width="35" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.3" stretchType="RelativeToTallestObject" x="747" y="0" width="55" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($V{sum-cust_name-do_pend_weight} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-cust_name-do_pend_weight}))]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<pageHeader>
+		<band height="20" splitType="Prevent">
+			<textField isStretchWithOverflow="true">
+				<reportElement style="1" stretchType="RelativeToTallestObject" x="0" y="0" width="802" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Company Name: " + $P{COMPANY_NAME} + "\n"
++ "Report Name: " + "Pending Order Reports by Customer" + "\n"
++ "Periode Sales Order" + ": " + $P{DATE_FORMATTER_DEFAULT}.format($P{FROM_DATE_2}) + " \u2013 " + $P{DATE_FORMATTER_DEFAULT}.format($P{TO_DATE_2})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Prevent">
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2.1.2" stretchType="RelativeToTallestObject" x="0" y="0" width="18" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["No"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2.1" stretchType="RelativeToTallestObject" x="18" y="0" width="90" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Sales Order No."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2.1" stretchType="RelativeToTallestObject" x="108" y="0" width="107" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Product"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2.1" stretchType="RelativeToTallestObject" x="215" y="0" width="55" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["SO Date"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2.1" stretchType="RelativeToTallestObject" x="270" y="0" width="68" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Expected Delivery Date"]]></textFieldExpression>
+			</textField>
+			<frame>
+				<reportElement stretchType="RelativeToTallestObject" x="338" y="0" width="464" height="20"/>
+				<frame>
+					<reportElement x="0" y="0" width="464" height="10"/>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.3" stretchType="RelativeToTallestObject" x="0" y="0" width="160" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Order Qty"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.3" stretchType="RelativeToTallestObject" x="160" y="0" width="152" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Delivered Qty"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.3" stretchType="RelativeToTallestObject" x="312" y="0" width="152" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Pending Qty"]]></textFieldExpression>
+					</textField>
+				</frame>
+				<frame>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="10" width="464" height="10"/>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.1" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="105" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["UoM"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.1.1" positionType="Float" stretchType="RelativeToTallestObject" x="105" y="0" width="55" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Net Weight (Kg)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.1" stretchType="RelativeToTallestObject" x="160" y="0" width="97" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["UoM"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.1.1" positionType="Float" stretchType="RelativeToTallestObject" x="257" y="0" width="55" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Net Weight (Kg)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.1" stretchType="RelativeToTallestObject" x="312" y="0" width="97" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["UoM"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.1.1" stretchType="RelativeToTallestObject" x="409" y="0" width="55" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Net Weight (Kg)"]]></textFieldExpression>
+					</textField>
+				</frame>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="10" splitType="Prevent">
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2" stretchType="RelativeToTallestObject" x="18" y="0" width="90" height="10"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{VCD}.detectChange("sales order no.",[$F{so_no}])
+? $F{so_no}
+: null]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2" stretchType="RelativeToTallestObject" x="108" y="0" width="107" height="10"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{prod}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2" stretchType="RelativeToTallestObject" x="215" y="0" width="55" height="10"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{VCD}.detectChange("so date",[$F{so_no}])
+? ($F{so_date} == null ? null : $P{DATE_FORMATTER_DEFAULT}.format($F{so_date}))
+: null]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2" stretchType="RelativeToTallestObject" x="270" y="0" width="68" height="10"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{expected_date} == null ? null : $P{DATE_FORMATTER_DEFAULT}.format($F{expected_date}))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="338" y="0" width="69" height="10"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{sol_qty} == null ? "N/A" : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{sol_qty})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2.4" stretchType="RelativeToTallestObject" x="407" y="0" width="35" height="10"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{sol_qty} == null ? "N/A" : $F{sol_uom}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="442" y="0" width="55" height="10"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{sol_qty} == null ? "N/A" : ($F{sol_weight} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{sol_weight}))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2.2" stretchType="RelativeToTallestObject" x="497" y="0" width="63" height="10"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{do_done_qty} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{do_done_qty}))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2" stretchType="RelativeToTallestObject" x="560" y="0" width="35" height="10"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{do_done_uom}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2.2" stretchType="RelativeToTallestObject" x="595" y="0" width="55" height="10"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{do_done_weight} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{do_done_weight}))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2.2" stretchType="RelativeToTallestObject" x="650" y="0" width="62" height="10"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{do_pend_qty} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{do_pend_qty}))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2" stretchType="RelativeToTallestObject" x="712" y="0" width="35" height="10"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{do_pend_uom}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="2.2" stretchType="RelativeToTallestObject" x="747" y="0" width="55" height="10"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{do_pend_weight} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{do_pend_weight}))]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Prevent">
+			<printWhenExpression><![CDATA[$P{PRINTED_PAGE_FOOTER}.indexOf($V{PAGE_NUMBER}) == -1
+? $P{PRINTED_PAGE_FOOTER}.add($V{PAGE_NUMBER})
+: false]]></printWhenExpression>
+			<textField evaluationTime="Report">
+				<reportElement style="99" x="0" y="0" width="364" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Printed by " + $P{OERP_USER}
++ " on " + $P{DATE_FORMATTER_TIME_DEFAULT}.format($P{TODAY})
++ ($P{SHOW_STOPWATCH}
+   ? String.format(" in %.3fs", $P{STOPWATCH}.stop().computeDeltaMs().deltaMs / 1000.0)
+   : "")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="99" x="364" y="0" width="75" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Strictly Confidential]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="99" x="697" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER} + " of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="99" x="777" y="0" width="25" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

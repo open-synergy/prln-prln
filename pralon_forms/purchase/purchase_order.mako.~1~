@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/xhtml/strict.dtd">
+<html><head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+</head>
+<%pages = len(objects)%>
+<% wrong_state = [] %>
+%for pos in objects:
+<% counter = 0 %>
+<%start_from = 0%>
+<%limit = 20%>
+<%increment = limit%>
+%if pos.state != 'approved' and pos.state != 'done':
+<% wrong_state.append('%s: %s' % (pos.name, pos.state)) %>
+%else:
+    <% import math %>
+    <% prod_lines = len(pos.order_line.product_id) %>
+    %if prod_lines != 0:    
+    <% loop_page = int(math.ceil(float(prod_lines) / limit))%>
+    %else:
+	<% loop_page = 0 %>
+    %endif
+	%for x in range (0, loop_page):
+    %if start_from > limit:
+    <p style="page-break-before:always;"></p><br/>
+    %else:
+    ${}
+    %endif
+<body style="font-size:12px;font-family:Sans-Serif;">
+<br/><br/><br/>
+<div style="width: 793.700787402px; height: 1000.519685039px; position: relative; left: 0px; top: 0px;">
+<table style="text-align: left; width: 100%;" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr max-height="170.078740157px"></tr></tbody></table><table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+        <tbody>
+          <tr>
+            <td style="vertical-align: top; width: 188.976px;">${helper.embed_logo_by_name('pralon_logo', 166)|n}<br>
+            </td>
+            <td style="vertical-align: top; width: 500px;"><h1 style="margin: 0px; font-size: 24px; padding-left: 3px; text-align: center;">P.T. PRALON</h1>
+            <table style="text-align: left; width: 500.055px;font-size:10px;" class="header_address" cellpadding="2" cellspacing="2">
+              <tbody>
+                <tr>
+                  <td style="vertical-align: top; width: 56px;">Head office</td>
+                  <td style="vertical-align: top;">:<br>
+                  </td>
+                  <td style="vertical-align: top;">Wisma Argo Manunggal
+18th Fl.<br> Jl. Gatot Subroto Kav. 22 Jakarta<br>
+Tel : (021) 5207575(H) 52963580, 2522010 Ext 1830-1835<br>
+Fax : (021) 52963584 Email : info@pralon.co.id, Website :
+www.pralon.co.id</td>
+                </tr>
+              </tbody>
+            </table>
+            </td>
+            <td style="vertical-align: top; width: 151.181px;"><br>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      <center>
+      <table height="25px">
+        <tbody><tr>
+            <td style="vertical-align: top; border-bottom: 1px solid #000000; padding-bottom:2px; font-weight: bold; font-size: 18px;text-align:center;">PURCHASE ORDER SHEET</td>
+        </tr>
+        <tr>
+            <td style="padding-left: 5px;border-bottom: 1px solid #000000; padding-bottom:2px;">FOREIGN TRADE No. ${pos.order_number or '' | entity} </td>
+        </tr>
+      </tbody></table></center>
+      <table width="793.700787402px;">
+      <tr>
+      <td></td>
+      <td></td>
+      <td width="226.771653543px">Date&nbsp;&nbsp;
+      <% month = str(pos.date_approve[5:7])%>
+      %if month =='01':
+      <% _month = "Januari"%>
+      %elif month =='02':
+      <% _month = "Februari"%>
+      %elif month =='03':
+      <% _month = "Maret"%>
+      %elif month == '04':
+      <% _month = "April"%>
+      %elif month == '05':
+      <% _month = "Mei"%>
+      %elif month == '06':
+      <% _month = "Juni"%>
+      %elif month == '07':
+      <% _month = "Juli"%>
+      %elif month == '08':
+      <% _month = "Agustus"%>
+      %elif month == '09':
+      <% _month = "September"%>
+      %elif month == '10':
+      <% _month = "Oktober"%>
+      %elif month == '11':
+      <% _month = "November"%>
+      %elif month == '12':
+      <% _month = "Desember"%>
+      %else:
+      ${month}
+      %endif
+      ${str(pos.date_approve[8:10])|n} 
+      ${_month}
+      ${str(pos.date_approve[0:4])|n}</td>
+      </tr>
+      </table>
+      <br>
+      <i>To : Messrs</i>&nbsp;${pos.partner_id.name or '' | entity}<br/> ${pos.partner_address_id.street or pos.partner_address_id.street2 or '' | entity}<br/> ${pos.partner_address_id.city or '' | entity}
+      ${pos.partner_address_id.zip or '' | entity}<br/>${pos.partner_address_id.country_id.name or '' | entity}
+      <br/><br/>
+      <center>
+      <table width="904.724409449px">
+        <tr>
+            <td style="font-weight:bold;vertical-align:top;" height="22.677165354px" width="174.724409449px">
+            1. Consignee
+            </td>
+            <td width="200.078740157px" style="vertical-align:top;">${pos.company_id.name}
+            </td>
+            <td style="font-weight:bold;width:150.047244094px;vertical-align:top;">
+            5. Terms of Price
+            </td>
+            <td style="vertical-align:top;vertical-align:top;">
+            ${pos.get_purchase_info_by_name(info_name='Terms of Price')[pos.id] or '' | n}
+            </td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;vertical-align:top;" height="22.677165354px">
+            2. Time of Shipment<br>
+            </td>
+            <td style="vertical-align:top;">
+            ${pos.get_purchase_info_by_name(info_name='Time of Shipment')[pos.id] or '' | n}
+            </td>
+            <td style="font-weight:bold;vertical-align:top;">6. Packing
+            </td>
+            <td style="vertical-align:top;">
+            ${pos.get_purchase_info_by_name(info_name='Packing')[pos.id] or '' | n}
+            </td>
+        </tr>
+         <tr>
+            <td style="font-weight:bold;vertical-align:top;" height="22.677165354px">
+            3. Place of Delivery
+            </td>
+            <td style="vertical-align:top;">
+            ${pos.get_purchase_info_by_name(info_name='Place of Delivery')[pos.id] or '' | n}
+            </td>
+            <td style="font-weight:bold;vertical-align:top;">
+            7. Destination
+            </td>
+            <td style="vertical-align:top;"> 
+			%if pos.dest_address_id.street == '' or pos.dest_address_id.street == None:
+			${pos.location_id and pos.location_id.address_id and pos.location_id.address_id.street or '' | entity}
+			${pos.location_id and pos.location_id.address_id and pos.location_id.address_id.city or '' | entity}
+			${pos.location_id and pos.location_id.address_id and pos.location_id.address_id.zip or '' | entity}
+			${pos.location_id and pos.location_id.address_id and pos.location_id.address_id.country_id and pos.location_id.address_id.country_id.name or '' | entity}
+			%else:
+			${pos.dest_address_id and pos.dest_address_id.street or ''|entity}
+			${pos.dest_address_id and pos.dest_address_id.city or ''|entity} ${pos.dest_address_id and pos.dest_address_id.zip or ''|entity} ${pos.dest_address_id and pos.dest_address_id.country_id and pos.dest_address_id.country_id.name or ''|entity}
+			%endif
+            </td>
+        </tr>
+         <tr>
+            <td style="font-weight:bold;vertical-align:top;" height="22.677165354px">
+            4. Terms of Payment
+            </td>
+            <td style="vertical-align:top;">${pos.partner_id.property_payment_term.name or '' |entity}
+            </td>
+            <td style="font-weight:bold;vertical-align:top;">
+            8. Insurance
+            </td>
+            <td style="vertical-align:top;">
+            ${pos.get_purchase_info_by_name(info_name='Insurance')[pos.id] or '' | n}
+            </td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;vertical-align:top;" height="22.677165354px">
+            Reference Estimate No.
+            </td>
+            <td style="vertical-align:top;">${pos.partner_ref or '' |entity}</td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;vertical-align:top;" height="22.677165354px">
+            L/C No.
+            </td>
+            <td style="vertical-align:top;">
+            ${pos.get_purchase_info_by_name(info_name='L/C No')[pos.id] or '' | n}
+            </td>
+            <td style="font-weight:bold;vertical-align:top;">
+            Proforma Invoice No.
+            </td>
+            <td style="vertical-align:top;">
+            ${pos.get_purchase_info_by_name(info_name='Proforma Invoice No')[pos.id] or '' | n}
+            </td>
+        </tr>
+        <tr>
+        <td colspan="4" style="font-size:10px;text-align:justify;text-indent: 12px;">We have pleasure to place the order to import the following goods with terms and conditions mentiones above and please send your proforma Invoice as confirmed sales.</td>
+        </tr>
+      </table></center>
+      <br>
+        <table style="width: 100%; border-collapse: collapse;" cellpadding="2" cellspacing="2">
+        <tbody>
+          <tr height="37">
+            <td style="border-top:double; border-left:0px; border-right:1px solid black; border-bottom:1px solid black;vertical-align: center; font-weight: bold; text-align: center;">Item No. & Shipping Marks<br>
+            </td>
+            <td style="border-top:double; border-left:0px; border-right:1px solid black; border-bottom:1px solid black; vertical-align: center; font-weight: bold; text-align: center;">D E S C R I P T I O N<br>
+            </td>
+            <td style="border-top:double; border-left:0px; border-right:1px solid black; border-bottom:1px solid black; vertical-align: center; font-weight: bold; text-align: center;">Quantity<br>
+            </td>
+            <td style="border-top:double; border-left:0px; border-right:1px solid black; border-bottom:1px solid black; vertical-align: center; font-weight: bold; text-align: center;">Unit Price (Rp)<br>
+            </td>
+            <td style="border-top:double; border-left:0px; border-right:0px; border-bottom:1px solid black; vertical-align: center; font-weight: bold; text-align: center;">Amount (Rp)<br>
+            </td>
+          </tr>
+          %if start_from !=0:
+          <% start_from = start_from%>
+          %else:
+          <% start_from = 0%>
+          <% count = 1%>
+          %endif
+          %for prods in pos.order_line[start_from:limit]:
+          <tr height="25px">
+            <td style="border-right: 1px solid black; vertical-align: top; text-align: left;width:170px;" nowrap>
+            ${prods.product_id and prods.product_id.default_code or ''|entity}     
+            </td>
+            <td style="border-right: 1px solid black; vertical-align: top;">
+            ${prods.product_id and prods.product_id.name or ''|entity}
+            </td>            
+            <td style="border-right: 1px solid black; vertical-align: top; text-align: right; padding-right: 5px;width:70px;" nowrap>
+            ${prods.product_qty or ''|entity}
+            ${prods.product_uom and prods.product_uom.name or ''|entity}
+            </td>
+            <td style="border-right: 1px solid black; vertical-align: top; text-align: right; padding-right: 5px;width:100px;" nowrap>
+            ${prods.price_unit |entity}
+            </td>
+            <td style="vertical-align: top;text-align:right;width:100px;" nowrap>
+            ${prods.price_subtotal |entity}
+            </td>
+          </tr>
+          <tr height="25px">
+            <td style="border-right: 1px solid black; vertical-align: top; text-align: left;width:170px;" nowrap>            
+            </td>
+            <td style="border-right: 1px solid black; vertical-align: top;">            
+            </td>            
+            <td style="border-right: 1px solid black; vertical-align: top; text-align: right; padding-right: 5px;width:70px;" nowrap>           
+            </td>
+            <td style="border-right: 1px solid black; vertical-align: top; text-align: right; padding-right: 5px;width:100px;" nowrap>            
+            </td>
+            <td style="vertical-align: top;text-align:right;width:100px;" nowrap>            
+            </td>
+          </tr>
+          %endfor
+          </tbody>
+          <%start_from =limit%>
+        <%limit +=increment%>
+      </table><br>
+</div>
+<% counter+=1%>
+<p style="text-align:right;margin-top:200px;">
+page ${counter} of ${loop_page}
+</p>
+<p style="page-break-after: always"></p>
+</body>
+%endfor
+%endif
+%endfor
+%if wrong_state:
+<small>
+<br/><br/><br/>
+<b>The following documents are not printed because the state is not valid:</b><br/>
+${', '.join(wrong_state)}
+</small>
+%endif
+</html>

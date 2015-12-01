@@ -1,0 +1,188 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data noupdate="1">
+        <record id="ir_header_webkit_pralon_a4p1" model="ir.header_webkit">
+            <field name="footer_html"><![CDATA[<html></html>]]></field>
+            <field eval="&quot;&quot;&quot;Portrait&quot;&quot;&quot;" name="orientation"/>
+            <field eval="&quot;&quot;&quot;A4&quot;&quot;&quot;" name="format"/>
+            <field name="html"><![CDATA[<html><div  class="div_header">
+<table cellpadding="2" cellspacing="2" class="table_header">
+  <tbody>
+    <tr>
+      <td colspan="1" rowspan="3" style="vertical-align: top;padding-top:79px;" width="166px" >
+      ${helper.embed_logo_by_name('pralon_logo', 166)|n}
+      </td>
+      <td colspan="3" rowspan="1" style="vertical-align: top;" width="445px" ><h1>P.T. PRALON</h1>
+      </td>
+      <td colspan="1" rowspan="3" style="vertical-align: top;">
+      ${helper.embed_logo_by_name('iso_9001_logo', 45)|n}
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Office</td>
+      <td style="vertical-align: top;">:<br>
+      </td>
+      <td style="vertical-align: top;">Wisma Argo Manunggal 18th Fl., Jl. Gatot Subroto Kav. 22 Jakarta<br>
+Tel : (021) 5207575(H) 52963580, 2522010 Ext 1830-1835<br>
+Fax : (021) 52963584 Email : info@pralon.co.id, Website : www.pralon.co.id<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Factory<br>
+      </td>
+      <td style="vertical-align: top;">:<br>
+      </td>
+      <td style="vertical-align: top;">Jl. Raya Bogor KM 32,5, Cimanggis, Depok<br>
+        Tel : (021) 8741028 (Hunting)<br>
+        Fax : (021) 8740913<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+</div></html>]]></field>
+            <field name="css" ><![CDATA[]]> </field>
+            <field eval="&quot;&quot;&quot;Pralon A4 Portrait 1&quot;&quot;&quot;" name="name"/>
+        </record>
+        <record id="ir_header_webkit_pralon_legalp" model="ir.header_webkit">
+            <field name="footer_html"><![CDATA[<html></html>]]></field>
+            <field eval="&quot;&quot;&quot;Portrait&quot;&quot;&quot;" name="orientation"/>
+            <field eval="&quot;&quot;&quot;Legal&quot;&quot;&quot;" name="format"/>
+            <field name="html"><![CDATA[<html><fieldset style="border: 1px solid ; padding: 3px;border-radius: 11px;">
+      <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+        <tbody>
+          <tr>
+            <td style="vertical-align: top;">${helper.embed_logo_by_name('pralon_logo', 166)|n}<br>
+            </td>
+            <td style="vertical-align: top; width: 434px;"><h1 style="margin: 0px; font-size: 19px; padding-left: 3px;">P.T. PRALON</h1>
+            <table style="text-align: left; width: 100%;" class="header_address" border="0" cellpadding="2" cellspacing="2">
+              <tbody>
+                <tr>
+                  <td style="vertical-align: top; width: 56px;">Head office</td>
+                  <td style="vertical-align: top;">:<br>
+                  </td>
+                  <td style="vertical-align: top;">Wisma Argo Manunggal
+18th Fl.<br> Jl. Gatot Subroto Kav. 22 Jakarta<br>
+Tel : (021) 5207575(H) 52963580, 2522010 Ext 1830-1835<br>
+Fax : (021) 52963584 Email : info@pralon.co.id, Website :
+www.pralon.co.id</td>
+                </tr>
+                <tr>
+                  <td style="vertical-align: top;">Factory<br>
+                  </td>
+                  <td style="vertical-align: top;">:<br>
+                  </td>
+                  <td style="vertical-align: top;">Jl. Raya Bogor KM
+32,5, Cimanggis, Depok<br>
+Tel : (021) 8741028 (Hunting)<br>
+Fax : (021) 8740913</td>
+                </tr>
+              </tbody>
+            </table>
+            <table style="width: 376px; font-size: 10px;">
+              <tbody>
+                <tr>
+                  <td>NPWP :
+                  </td>
+                  <td class="border_npwp">0
+                  </td>
+                  <td class="border_npwp">1
+                  </td>
+                  <td>&nbsp;
+                  </td>
+                  <td class="border_npwp">0
+                  </td>
+                  <td class="border_npwp">0
+                  </td>
+                  <td class="border_npwp">1
+                  </td>
+                  <td>&nbsp;</td>
+                  <td class="border_npwp">7
+                  </td>
+                  <td class="border_npwp">7
+                  </td>
+                  <td class="border_npwp">4
+                  </td>
+                  <td>&nbsp;
+                  </td>
+                  <td class="border_npwp">7
+                  </td>
+                  <td style="vertical-align: top;">&nbsp;
+                  </td>
+                  <td class="border_npwp">0
+                  </td>
+                  <td class="border_npwp">5
+                  </td>
+                  <td class="border_npwp">2
+                  </td>
+                  <td style="vertical-align: top;">&nbsp;
+                  </td>
+                  <td class="border_npwp">0
+                  </td>
+                  <td class="border_npwp">0
+                  </td>
+                  <td class="border_npwp">0
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </td>
+            <td style="vertical-align: top;">${helper.embed_logo_by_name('iso_9001_logo', 45)|n}<br>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </fieldset></html>]]></field>
+            <field name="css" ><![CDATA[]]> </field>
+            <field eval="&quot;&quot;&quot;Pralon Legal Portrait&quot;&quot;&quot;" name="name"/>
+        </record>
+        <record id="ir_header_webkit_custom_legal" model="ir.header_webkit">
+            <field name="footer_html"><![CDATA[<html></html>]]></field>
+            <field eval="&quot;&quot;&quot;Landscape&quot;&quot;&quot;" name="orientation"/>
+            <field eval="&quot;&quot;&quot;Custom&quot;&quot;&quot;" name="format"/>
+            <field name="html"><![CDATA[<html></html>]]></field>
+            <field name="css" ><![CDATA[]]> </field>
+            <field eval="&quot;&quot;&quot;280&quot;&quot;&quot;" name="paper_height"/>
+            <field eval="&quot;&quot;&quot;215&quot;&quot;&quot;" name="paper_width"/>
+            <field eval="&quot;&quot;&quot;Custom Paper 280 x 215&quot;&quot;&quot;" name="name"/>
+        </record>
+        <record id="pralon_preprinted_a4p" model="ir.header_webkit">
+            <field name="footer_html"><![CDATA[<html></html>]]></field>
+            <field eval="&quot;&quot;&quot;Portrait&quot;&quot;&quot;" name="orientation"/>
+            <field eval="&quot;&quot;&quot;A4&quot;&quot;&quot;" name="format"/>
+            <field name="html"><![CDATA[<html></html>]]></field>
+            <field name="css" ><![CDATA[]]> </field>
+            <field eval="&quot;&quot;&quot;5&quot;&quot;&quot;" name="margin_top"/>
+            <field eval="&quot;&quot;&quot;5&quot;&quot;&quot;" name="margin_bottom"/>
+            <field eval="&quot;&quot;&quot;10&quot;&quot;&quot;" name="margin_left"/>
+            <field eval="&quot;&quot;&quot;10&quot;&quot;&quot;" name="margin_right"/>
+            <field eval="&quot;&quot;&quot;Pralon A4 Portrait (Pre-printed)&quot;&quot;&quot;" name="name"/>
+        </record>
+        <record id="pralon_plain_a5l" model="ir.header_webkit">
+            <field name="footer_html"><![CDATA[<html></html>]]></field>
+            <field eval="&quot;&quot;&quot;Landscape&quot;&quot;&quot;" name="orientation"/>
+            <field eval="&quot;&quot;&quot;A5&quot;&quot;&quot;" name="format"/>
+            <field name="html"><![CDATA[<html></html>]]></field>
+            <field name="css" ><![CDATA[]]> </field>
+            <field eval="&quot;&quot;&quot;17&quot;&quot;&quot;" name="margin_top"/>
+            <field eval="&quot;&quot;&quot;17&quot;&quot;&quot;" name="margin_bottom"/>
+            <field eval="&quot;&quot;&quot;15&quot;&quot;&quot;" name="margin_left"/>
+            <field eval="&quot;&quot;&quot;15&quot;&quot;&quot;" name="margin_right"/>
+            <field eval="&quot;&quot;&quot;Pralon A5 Landscape&quot;&quot;&quot;" name="name"/>
+        </record>
+        <record id="pralon_webkit_custom_taxform" model="ir.header_webkit">
+            <field name="footer_html"><![CDATA[<html></html>]]></field>
+            <field eval="&quot;&quot;&quot;Portrait&quot;&quot;&quot;" name="orientation"/>
+            <field eval="&quot;&quot;&quot;Custom&quot;&quot;&quot;" name="format"/>
+            <field name="html"><![CDATA[<html></html>]]></field>
+            <field name="css" ><![CDATA[]]> </field>
+            <field eval="&quot;&quot;&quot;280&quot;&quot;&quot;" name="paper_height"/>
+            <field eval="&quot;&quot;&quot;215&quot;&quot;&quot;" name="paper_width"/>
+            <field eval="&quot;&quot;&quot;17&quot;&quot;&quot;" name="margin_top"/>
+            <field eval="&quot;&quot;&quot;10&quot;&quot;&quot;" name="margin_bottom"/>
+            <field eval="&quot;&quot;&quot;5&quot;&quot;&quot;" name="margin_left"/>
+            <field eval="&quot;&quot;&quot;5&quot;&quot;&quot;" name="margin_right"/>
+            <field eval="&quot;&quot;&quot;Pralon Taxform &quot;&quot;&quot;" name="name"/>
+        </record>
+    </data>
+</openerp>

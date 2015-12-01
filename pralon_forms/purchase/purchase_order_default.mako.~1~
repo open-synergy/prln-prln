@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><meta content="text/html; charset=ISO-8859-1" http-equiv="content-type" /></head>
+<style>
+body {
+    font-size: 11px;
+}
+</style>
+<%pages = len(objects)%>
+<% wrong_state = [] %>
+<% records = len(objects)%>
+%for po in objects:
+<% counter = 0 %>
+<%start_from = 0%>
+<%limit = 20%>
+<%increment = limit%>
+<% currency = po.pricelist_id and po.pricelist_id.currency_id and po.pricelist_id.currency_id.symbol %>
+%if po.state != 'approved' and po.state != 'done':
+<% wrong_state.append('%s: %s' % (po.name, po.state)) %>
+%else:
+    <% import math %>
+    <% prod_lines = len(po.order_line) %>
+    %if prod_lines != 0:    
+    <% loop_page = int(math.ceil(float(prod_lines) / limit))%>
+    %else:
+	<% loop_page = 0 %>
+    %endif
+	%for x in range (0, loop_page):
+    %if start_from > limit:
+    <p style="page-break-before:always;"></p><br/>
+    %else:
+    ${}
+    %endif
+<body>
+<table style="text-align: left; width: 100%;border-collapse: collapse;" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;border-bottom:1px solid #000000;" width="188.976377953px">${helper.embed_logo_by_name('pralon_logo', 166)|n}<br />
+      </td>
+      <td style="vertical-align: top; border-bottom:1px solid #000000;"><br />
+      </td>
+      <td style="vertical-align: bottom;text-align:right;border-bottom:1px solid #000000;" width="238.11023622px">PERTAMA dan TERBAIK<br />
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">${po.company_id and po.company_id.name or ''|entity}<br />
+    ${po.company_id and po.company_id.street or ''|entity}<br />
+    ${po.company_id and po.company_id.zip or ''|entity} ${po.company_id and po.company_id.city or ''|entity} - ${po.company_id and po.company_id.country_id.name or ''|entity}<br />
+    <table style="width: 100%;border-collapse: collapse;">
+    <tr>
+        <td width="200px">Phone: ${po.company_id and po.company_id.phone or ''|entity}</td>
+    </tr>
+    <tr>
+        <td style="border-bottom:1px solid #000000;">Mail: ${po.company_id and po.company_id.email or ''|entity}</td>
+    </tr>
+    </table>
+    <br/>
+    <br/>
+      </td>
+      <td style="vertical-align: top;"><br />
+      </td>
+      <td style="vertical-align: top;"><br />
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><b>Shipping address :</b><br />
+      %if po.dest_address_id: 
+      ${po.dest_address_id and po.dest_address_id.name or ''|entity}<br />
+      ${po.dest_address_id and po.dest_address_id.street or ''|entity}<br />
+      ${po.dest_address_id and po.dest_address_id.city or ''|entity},
+      ${po.dest_address_id and po.dest_address_id.zip or ''|entity}<br />
+      ${po.dest_address_id and po.dest_address_id.country_id and po.dest_address_id.country_id.name or ''|entity}
+      %else:
+      ${po.location_id and po.location_id.location_id and po.location_id.location_id.name or ''|entity}<br />
+      ${po.location_id and po.location_id.name or ''|entity}<br />
+      ${po.location_id and po.location_id.address_id and po.location_id.address_id.street or ''|entity}<br/>
+      ${po.location_id and po.location_id.address_id and po.location_id.address_id.city or ''|entity},
+      ${po.location_id and po.location_id.address_id and po.location_id.address_id.zip or ''|entity}<br/>
+      ${po.location_id and po.location_id.address_id and po.location_id.address_id.country_id and po.location_id.address_id.country_id.name or ''|entity}
+      %endif
+      </td>
+      <td style="vertical-align: top;"><br />
+      </td>
+      <td style="vertical-align: top;">
+      ${po.partner_id and po.partner_id.name or ''|entity}<br />
+      ${po.partner_address_id and po.partner_address_id.street or ''|entity}<br/>
+      ${po.partner_address_id and po.partner_address_id.street2 or ''|entity}<br/>
+      ${po.partner_address_id and po.partner_address_id.city or ''|entity}<br/>
+      ${po.partner_address_id and po.partner_address_id.country_id and po.partner_address_id.country_id.name or ''|entity}<br />
+      Tel. : ${po.partner_address_id and po.partner_address_id.phone or ''|entity}<br />
+      Fax. : ${po.partner_address_id and po.partner_address_id.fax or ''|entity}
+      <br/><br/><br/></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;" colspan="3">
+      <h3><b>Purchase Order Confirmation No ${po.order_number or ''|entity}</b></h3>
+      <br />
+      <table style="border-collapse: collapse;">
+      <tr>
+      <td style="border: 1px solid #eaeaea;" width="154.960629921px">Our Order Reference</td>
+      <td style="border: 1px solid #eaeaea;" width="154.960629921px">Your Order Reference</td>
+      <td style="border: 1px solid #eaeaea;" width="154.960629921px">Order Date</td>
+      <td style="border: 1px solid #eaeaea;" width="154.960629921px">Validated by</td>
+      </tr>
+      <tr>
+      <td style="border: 1px solid #eaeaea;">${po.order_number or ''|entity}</td>
+      <td style="border: 1px solid #eaeaea;">${po.partner_ref or ''|entity}</td>
+      <td style="border: 1px solid #eaeaea;">${date_order_fmt(po.date_approve) or ''|n}</td>
+      <td style="border: 1px solid #eaeaea;">${po.validator.name or ''|entity}</td>
+      </tr>
+      </table>
+      <br/>
+      <table style="border-collapse: collapse;">
+      <tr>
+      <td style="border-bottom: 1px solid #000000;" width="300.669291339px">Description</td>
+      <td style="border-bottom: 1px solid #000000;" width="83.149606299px">Taxes</td>
+      <td style="border-bottom: 1px solid #000000;text-align:right;padding-right:15px;" width="85.251968504px">Qty</td>
+      <td style="border-bottom: 1px solid #000000;" width="60.692913386px">Unit Price</td>
+      <td style="border-bottom: 1px solid #000000;text-align:right;" width="100.692913386px">Amount</td>
+      </tr>
+      %for item in po.order_line:
+      <tr>
+      <td width="300.669291339px">${item.name or ''|entity}
+      <br/>${item.notes or ''|entity}
+      </td>
+      <td width="83.149606299px">
+      %for taxes in item.taxes_id:
+      ${taxes.name or ''|entity}
+      %endfor</td>
+      <td style="text-align:right;padding-right:15px;" width="85.251968504px">${item.product_qty or ''|entity} ${item.product_uom.name or ''|entity}</td>
+      <td width="56.692913386px">${item.price_unit or '0.00'|entity}</td>
+      <td width="100.692913386px" style="text-align:right;">${currency} ${item.price_subtotal or '0.00'}</td>
+      </tr>
+      %endfor
+      </table>
+      <br/><br/>
+      <table style="border-collapse:collapse;">
+      <tr>
+      <td width="434.645669291px"></td>
+      <td width="139.842519685px" style="border-top:1px solid #000000;">Total Amount :</td>
+      <td style="border-top:1px solid #000000;">
+      ${currency} </td>
+      <td style="text-align:right;border-top:1px solid #000000;">${po.amount_untaxed or '0.00'|entity}</td>
+      </tr>
+      <tr>
+      <td></td>
+      <td>Taxes :</td>
+      <td>
+      ${currency} </td>
+      <td style="text-align:right;">${po.amount_tax or '0.00'|entity}</td>
+      </tr>
+      <tr>
+      <td></td>
+      <td style="border-top:1px solid #000000;"><b>Grand Total :</b></td>
+      <td style="border-top:1px solid #000000;">${currency}</td>
+      <td style="text-align:right;border-top:1px solid #000000;">${po.amount_total or '0.00'|entity}</td>
+      </tr>
+      </table><br/><br/><br/>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;" colspan="2">
+      <table style="border-collapse: collapse;">
+        <tr>
+        <td style="border: 1px solid #eaeaea;" width="154.960629921px">Consignee :</td>
+        <td style="border: 1px solid #eaeaea;"  width="250px">
+        ${po.get_purchase_info_by_name(info_name='Consignee')[po.id] or '' | n}
+        </td>
+        </tr>
+        <tr>
+        <td style="border: 1px solid #eaeaea;">Shipping Date :</td>
+        <td style="border: 1px solid #eaeaea;">
+        ${po.get_purchase_info_by_name(info_name='Shipping Date')[po.id] or '' | n}
+        </td>
+        </tr>
+        <tr>
+        <td style="border: 1px solid #eaeaea;">Shipping Terms :</td>
+        <td style="border: 1px solid #eaeaea;">
+        ${po.get_purchase_info_by_name(info_name='Shipping Terms')[po.id] or '' | n}
+        </td>
+        </tr>
+        <tr>
+        <td style="border: 1px solid #eaeaea;">Payment Terms :</td>
+        <td style="border: 1px solid #eaeaea;">${po.get_purchase_info_by_name(info_name='Payment Terms')[po.id] or '' | n}</td>
+        </tr>
+      </table>
+      <br/>
+      ${po.notes or ''|entity}<br /><br /><br /><br/><br/><br/><br/><br/><br/>
+      </td>
+      <td style="vertical-align: top;"><br />
+      </td>
+      </td>
+    </tr>
+    <tr>
+    <td style="text-align:center;">Authorized by,
+    <br/>
+    <br/>
+    <br/><br/><br/>
+    ${signatory(po.company_id.id)} <br/>
+    ${po.company_id and po.company_id.name or ''|entity}
+    </td>
+    <td></td>
+    <td style="text-align:center;">Approved by,
+    <br/><br/><br/><br/><br/>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)
+    </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+%if records  > 1:
+   <p style="page-break-after:always;"></p><br/><br/>
+  <% records = records -1 %>
+    %else:
+    ${}
+    %endif
+%endfor
+%endif
+%endfor
+%if wrong_state:
+<small>
+<br/><br/><br/>
+<b>The following documents are not printed because the state is not valid:</b><br/>
+${', '.join(wrong_state)}
+</small>
+%endif
+</html>

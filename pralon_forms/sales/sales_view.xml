@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    <record id="view_order_form" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+            <button string="Print Quotation" position="replace">
+                    <button name="%(report_webkit_quotation)d" string="Print Quotation" type="action" icon="gtk-print" states="draft"/>
+                </button>
+            </field>
+    </record>
+    </data>
+</openerp>

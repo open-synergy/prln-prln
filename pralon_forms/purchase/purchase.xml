@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report auto="False"
+                id="report_webkit_pr"
+                model="purchase.requisition"
+                name="webkit_pr"
+                file="pralon_forms/purchase/purchase_requisition.mako"
+                string="Purchase Requisition"
+                report_type="webkit"
+                webkit_header="via_report_webkit.ir_header_webkit_plain_a4p"/>
+        <report auto="False"
+                id="report_webkit_po_def"
+                model="purchase.order"
+                name="webkit_po_def"
+                file="pralon_forms/purchase/purchase_order_default.mako"
+                string="Purchase Order"
+                report_type="webkit"
+                webkit_header="via_report_webkit.ir_header_webkit_plain_a4p"/>
+        <report auto="False"
+                id="report_webkit_rfq"
+                model="purchase.order"
+                name="webkit_rfq"
+                file="pralon_forms/purchase/request_for_quotation.mako"
+                string="Request for Quotations"
+                report_type="webkit"
+                webkit_header="via_report_webkit.ir_header_webkit_plain_a4p"/>
+        <delete id="purchase.order.purchase.order" model="ir.actions.report.xml"/>
+        <delete id="purchase_requisition.report_purchase_requisition" model="ir.actions.report.xml"/>
+        <delete id="purchase.report_purchase_quotation" model="ir.actions.report.xml"/>
+        <delete id="purchase.order.webkit_po_local" model="ir.actions.report.xml"/>
+        <delete id="purchase.order.webkit_po" model="ir.actions.report.xml"/>
+    </data>
+</openerp>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record id="purchase_info_state" model="code.category">
+            <field name="name">Purchase Information State</field>
+        </record>
+    </data>
+</openerp>

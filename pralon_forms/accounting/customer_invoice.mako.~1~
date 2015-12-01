@@ -1,0 +1,408 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head></head>
+<% wrong_state = [] %>
+<% first_page = True %>
+<% records = len(objects)%>
+%for inv in objects:
+<% start_from = 0 %>
+<% limit = 20%>
+<% counter = 0 %>
+<% inc = limit %>
+<% grand_total = 0%>
+<% total_disc = 0%>
+% if inv.state != 'open' and inv.state != 'paid':
+<% wrong_state.append('%s: %s' % (inv.name, inv.state)) %>
+%else:
+%if first_page:
+    <% first_page = False %>
+%else:
+${}
+%endif
+<% import math %>
+    <% inv_lines = len(inv.invoice_line) %>
+    %if inv_lines != 0:    
+    <% loop_page = int(math.ceil(float(inv_lines) / limit))%>
+    %else:
+    %endif
+    %for x in range (0, loop_page):
+    %if start_from > limit or counter > 0:
+    <p style="page-break-after:always;"></p>    
+    %else:
+    ${}
+    %endif
+<body style="font-size:12px;font-family:Sans-Serif">
+<table style="width:816px;height:1100px;">
+<tr>
+<td style="vertical-align: top;">
+<table style="text-align: left; width: 755.905511811px;height: 1000.653543307px;" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td colspan="5" rowspan="1" style="vertical-align: top;height:188.976377953px;"><br>
+      </td>
+    </tr>
+    <tr height="41.57480315px">
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;" colspan="2" ><center>
+      <table>
+      <tr>
+      <td>
+      </td>
+      <td width="151.181102362px">
+      <table>
+      <tr>
+        <td style="border-bottom:1px solid black;padding-bottom:5px;font-size:20px;"><center><b>FAKTUR</b></center></td>
+      </tr>
+      <tr>
+        <td style="padding-top:5px;"><b>No.${inv.number or ''|entity}</b></td>
+      </tr>
+      </table>
+      </td>
+      <td>
+      </td>
+      </tr>
+      </table></center>
+      </td>
+      <td style="vertical-align: top;padding-top:20px; width:188.976377953px;"><b>Tanggal :</b> 
+      %if inv.date_invoice == False and inv.date_invoice =='':
+      ${}
+      %else:
+      ${str(inv.date_invoice[8:10])|n}
+      <% month = str(inv.date_invoice[5:7])%>
+      %if month =='01':
+      <% _month = "Januari"%>
+      %elif month =='02':
+      <% _month = "Februari"%>
+      %elif month =='03':
+      <% _month = "Maret"%>
+      %elif month == '04':
+      <% _month = "April"%>
+      %elif month == '05':
+      <% _month = "Mei"%>
+      %elif month == '06':
+      <% _month = "Juni"%>
+      %elif month == '07':
+      <% _month = "Juli"%>
+      %elif month == '08':
+      <% _month = "Agustus"%>
+      %elif month == '09':
+      <% _month = "September"%>
+      %elif month == '10':
+      <% _month = "Oktober"%>
+      %elif month == '11':
+      <% _month = "November"%>
+      %elif month == '12':
+      <% _month = "Desember"%>
+      %else:
+      ${month}
+      %endif
+      ${_month}
+      ${str(inv.date_invoice[0:4])|n}<br>
+      %endif
+      </td>
+    </tr>
+    <tr>
+    <td colspan="5" height="1px"><hr style="padding:0px;margin:0px;height:2px;background:#000;"></td>
+    </tr>
+    <tr height="83.149606299px">
+    <td colspan="5">
+    <table>
+    <tr>
+        <td style="vertical-align: top;width: 100px;"><b>Nama Pembeli</b></td>
+        <td style="vertical-align: top;width: 5px;">:</td>
+        <td style="vertical-align: top;width: 270px;">${inv.partner_id and inv.partner_id.name or ''|entity}</td>
+        <td style="vertical-align: top;width: 180px;"><b>Order Sdr. No/ Surat Jalan No.</b></td>
+        <td style="vertical-align: top;width: 5px;">:</td>
+        <td style="vertical-align: top;">${inv.origin or ''|entity}</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top;width: 85px;"><b>Alamat</b></td>
+        <td style="vertical-align: top;width: 5px;">:</td>
+        <td style="vertical-align: top;width: 270px;"> 
+        ${inv.address_invoice_id and inv.address_invoice_id.street or ''|entity}<br/>
+        ${inv.address_invoice_id and inv.address_invoice_id.city or ''|entity} 
+        ${inv.address_invoice_id and inv.address_invoice_id.zip or ''|entity}<br/>
+        ${inv.address_invoice_id and inv.address_invoice_id.country_id and inv.address_invoice_id.country_id.name or ''|entity}
+        </td>
+        <td style="vertical-align: top;width: 100px;"></td>
+        <td style="vertical-align: top;width: 5px;"></td>
+        <td style="vertical-align: top;"></td>
+    </tr>
+    </table>
+    </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;height:30.236220472px;"><b>N.P.W.P</b></td>
+      <td style="vertical-align: top;">:<br>
+      </td>
+      <td style="vertical-align: top;">
+       <table style="font-size: 13px;">
+              <tbody>
+                <tr>
+             %if len (inv.partner_id.partner_info):
+                 %for idx in range(20):
+                        %for n in inv.partner_id.partner_info:
+                  <td style="border:1px solid black;width:18.897637795px;height:18.897637795px;" align=center>${len(n.value) > idx and n.value[idx] or '' | entity}
+                  </td>
+                        %endfor
+                 %endfor
+             %else:
+                 %for idx in range(20):
+                 <td style="border:1px solid black;width:18.897637795px;height:18.897637795px;"><br/>
+                  </td>
+                 %endfor
+             %endif
+                </tr>
+              </tbody>
+            </table>
+      </td>
+      <td colspan="2" rowspan="1" style="vertical-align: top;">
+      <table style="text-align: left; width: 154.960629921px;" cellpadding="2" cellspacing="2">
+        <tbody>
+          <tr>
+            <td style="vertical-align: top;">PKP<br>
+            </td>
+            <td style="vertical-align: top;border:1px solid black;width:18.897637795px;">
+            
+            %if len(inv.partner_id.partner_info):
+            <center>${"V"}</center>
+            %else:
+            ${}
+            %endif
+            </td>
+            <td style="vertical-align: top;width:75.590551181px;text-align: right;">Bukan PKP<br>
+            </td>
+            <td style="vertical-align: top;border:1px solid black;width:18.897637795px;">
+            %if len(inv.partner_id.partner_info)==0:
+            <center>${"V"}</center>
+            %endif
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="5" rowspan="1" style="vertical-align: top;">
+      <table style="text-align: left;border-collapse:collapse;width:755.905511811px;height:625.669291339px" cellpadding="2" cellspacing="2">
+        <tbody>
+          <tr style="border-top:double;">
+            <td style="height:32.125984252px;vertical-align: top;font-weight:bold;text-align:center;border-right:1px solid black;border-top:double;border-bottom:1px solid black;border-collapse:collapse;">No.<br>
+            </td>
+            <td style="vertical-align: top;font-weight:bold;text-align:center;border-top:double ;border-right:1px solid black;border-left:1px solid black;border-bottom:1px solid black;border-collapse:collapse;" nowrap width="450px">Nama Barang Kena Pajak<br>
+            </td>
+            <td style="vertical-align: top;font-weight:bold;text-align:center;border-top:double ;border-right:1px solid black;border-left:1px solid black;border-bottom:1px solid black;border-collapse:collapse;">Kuantum<br>
+            </td>
+            <td style="vertical-align: top;font-weight:bold;text-align:center;border-top:double ;border-right:1px solid black;border-left:1px solid black;border-bottom:1px solid black;border-collapse:collapse;">Harga Satuan<br>
+            </td>
+            <td colspan="2" style="vertical-align: top;font-weight:bold;text-align:center;border-top:double;border-left:1px solid black;border-bottom:1px solid black;border-collapse:collapse;">Harga Jual<br>
+            </td>
+          </tr>
+          %if start_from !=0:
+          <% start_from = start_from%>
+          <% pg = "<p style='page-break-after: always'></p>" %>
+          %else:
+          <% start_from = 0%>
+          <% count = 1%>
+          %endif
+          <%count = 1 %>
+          %for items in inv.invoice_line[start_from:limit]:
+          <% subtotal = (items.price_subtotal * 100) / (100-(items.discount or 0.0))%>
+          <tr>
+            <td style="vertical-align: top;text-align:center;border-right:1px solid black;width:30px;height:15px;" nowrap>
+            ${count}
+            </td>
+            <td style="vertical-align: top;border-right:1px solid black;">
+            ${items.name or ''|entity}
+            </td>          
+            <td style="vertical-align: top;text-align:right;border-right:1px solid black;">
+            ${formatLang(items.quantity, digits=0) or ''|entity}<br>
+            </td>
+            <td style="vertical-align: top;text-align:right;border-right:1px solid black;width:75px;" nowrap>
+            <% price_unit = (subtotal or 0.00) / (items.quantity or 0.00)%>
+            ${formatLang(round_currency(cr, uid, inv.currency_id, price_unit), digits=0)}
+            </td>
+            <td colspan="2" style="vertical-align: top;text-align:right;width:100px;">
+            ${formatLang(round_currency(cr, uid, inv.currency_id, subtotal), digits=0)}
+            </td>
+          <%count +=1%>
+          <% disc = (subtotal * items.discount) / 100 %>
+          <% total_disc +=disc %>
+          <%grand_total +=subtotal%>
+          %endfor
+          <% count = count %>
+          <%start_from +=inc%>
+          <%limit +=inc%>
+          </tr>
+          <tr>
+          <td align='center' width="50px" style="vertical-align:top;border-right:1px solid black;">
+          </td>
+          <td align='left' style="vertical-align:top;border-right:1px solid black;" width=750px>
+          </td>
+          <td align='center' style="vertical-align:top;border-right:1px solid black;" width=200px>
+          </td>
+          <td align='center' style="vertical-align:top;border-right:1px solid black;" width=200px>
+          </td> 
+          <td align='center' style="vertical-align:top;" width=200px>
+          </td>
+          </tr>
+          <tr>
+            <td colspan="4" rowspan="1" style="height:32.125984252px;vertical-align:middle;border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;"><b>Jumlah Harga Jual</b><br>
+            </td>
+            <td width="20px" style="border-bottom:1px solid black;border-top:1px solid black;">Rp.</td>
+            <td style="vertical-align: middle;text-align:right;border-top:1px solid black;border-bottom:1px solid black;">
+            ${formatLang(round_currency(cr, uid, inv.currency_id, grand_total), digits=0)}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" rowspan="1" style="height:32.125984252px;vertical-align: middle;border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;"><b>Dikurangi Potongan Harga</b><br>
+            </td>
+            <td width="20px" style="border-bottom:1px solid black;">Rp.</td>
+            <td style="vertical-align: middle;border-top:1px solid black;border-bottom:1px solid black;text-align:right;">
+            <% disc = (subtotal * items.discount) / 100 %>
+            <% discount = formatLang(round(disc))%>
+            ${formatLang(round_currency(cr, uid, inv.currency_id, total_disc), digits=0) }<br>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" rowspan="1" style="height:32.125984252px;vertical-align: middle;border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;"><b>Dasar Pengenaan Pajak</b><br>
+            </td>
+            <td width="20px" style="border-bottom:1px solid black;">Rp.</td>
+            <td style="vertical-align: middle;text-align:right;border-top:1px solid black;border-bottom:1px solid black;">
+            ${formatLang(round_currency(cr, uid, inv.currency_id, inv.amount_untaxed), digits=0) }
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" rowspan="1" style="height:32.125984252px;vertical-align: middle;border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;"><b>PPN = 10% x Dasar Pengenaan Pajak</b><br>
+            </td>
+            <td width="20px" style="border-bottom:1px solid black;">Rp.</td>
+            <td style="vertical-align: middle;text-align:right;border-top:1px solid black;border-bottom:1px solid black;">
+            ${formatLang(round_currency(cr, uid, inv.currency_id, inv.amount_tax), digits=0)}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" rowspan="1" style="height:32.125984252px;vertical-align: middle;border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;">
+            <table>
+            <tr>
+                <td><b>Total&nbsp;&nbsp;&nbsp;</b></td>
+                <td style="border-bottom:1px dashed;">
+            <%! from via_l10n_id.via_tools import amount_to_text_id %>
+            %if inv.amount_total =='' and inv.amount_total==0.00:
+            ${}
+            %elif inv.amount_total == 0:
+            ${}
+            %else:
+            ${amount_to_text_id.amount_to_text(abs(inv.amount_total)) or '' | entity}
+            %endif
+            </td>
+            </tr>
+            </table>
+            </td>
+            <td width="20px" style="border-bottom:1px solid black;">Rp.</td>
+            <td style="vertical-align: middle;text-align:right;border-top:1px solid black;border-bottom:1px solid black;padding-bottom:0px;">
+            ${formatLang(round_currency(cr, uid, inv.currency_id, inv.amount_total), digits=0) }
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" rowspan="1" style="vertical-align: middle;height:18.897637795px;padding-top:0px;"><b>Tanggal Jatuh Tempo Pembayaran :</b>&nbsp;
+      %if len(str(inv.date_due[8:10]))==0:
+      ${''}
+      %else:
+      ${str(inv.date_due[8:10])}
+      <% month = str(inv.date_due[5:7])%>
+          %if month =='01':
+          <% _month = "Januari"%>${_month}
+          %elif month =='02':
+          <% _month = "Februari"%>${_month}
+          %elif month =='03':
+          <% _month = "Maret"%>${_month}
+          %elif month == '04':
+          <% _month = "April"%>${_month}
+          %elif month == '05':
+          <% _month = "Mei"%>${_month}
+          %elif month == '06':
+          <% _month = "Juni"%>${_month}
+          %elif month == '07':
+          <% _month = "Juli"%>${_month}
+          %elif month == '08':
+          <% _month = "Agustus"%>${_month}
+          %elif month == '09':
+          <% _month = "September"%>${_month}
+          %elif month == '10':
+          <% _month = "Oktober"%>${_month}
+          %elif month == '11':
+          <% _month = "November"%>${_month}
+          %elif month == '12':
+          <% _month = "Desember"%>${_month}
+          %else:
+          ${''}
+          %endif
+      
+          %if len(str(inv.date_due[0:4]))==0:
+          ${''}
+          %else:
+          ${str(inv.date_due[0:4])}
+          %endif
+      %endif
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr><td colspan=5>
+	<table width=700>
+		<tr><td align=right>Dharmakumara</td></tr>
+	</table>
+    </td></tr>
+  </tbody>
+</table>
+</td>
+</tr>
+</table>
+<% counter+=1%>
+</body>
+<small>
+<p style="text-align:right;margin-top:15px;">
+page ${counter} of ${loop_page}
+</p>
+</small>
+%endfor
+%if records > 1:
+<p style="page-break-after:always;"></p>
+<%records = records - 1 %>
+%else:
+${}
+%endif
+%endif
+%endfor
+%if wrong_state:
+<p style="page-break-after:always;"></p>
+<small>
+<br/><br/><br/>
+<b>The following documents are not printed because the state is not valid:</b><br/>
+${', '.join(wrong_state)}
+</small>
+%endif
+</html>

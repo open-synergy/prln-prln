@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head></head>
+<style type="text/css">
+    body{
+        width: 700.700787402px;
+        height: 900.842519685px;
+        margin: 0px;
+        font-family:"Sans-Serif", Times, serif;
+        font-size: 11px;
+    }
+  </style>
+<% month_lib = ('', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus','September', 'Oktober', 'November', 'Desember')%>
+<% wrong_state = [] %>
+<% first_page = True %>
+%for reqs in objects:
+<% start_from = 0 %>
+<% limit = 5 %>
+<%increment = limit%>
+<%counter = 1%>
+%if reqs.state != 'draft':
+<% wrong_state.append('%s: %s' % (reqs.name, reqs.state)) %>
+%else:
+%if first_page:
+    <% first_page = False %>
+%else:
+<p style="page-break-after: always"></p>
+%endif
+    <% import math %>
+    <% prod_lines = len(reqs.order_line) %>
+    %if prod_lines:    
+    <% loop_page = int(math.ceil(float(prod_lines) / limit))%>
+    %else:
+    <% loop_page = 1%>
+    %endif
+    %for x in range (0, loop_page):
+    %if start_from > limit or counter > 0:
+   <br/>
+    %else:
+    ${}
+    %endif
+<body><br/><br/>
+<table style="width: 100%;border-collapse: collapse;" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;border-bottom:1px solid #000000;" width="188.976377953px">
+      ${helper.embed_logo_by_name('pralon_logo', 166)|n}<br />
+      </td>
+      <td style="vertical-align: top; border-bottom:1px solid #000000;"><br />
+      </td>
+      <td style="vertical-align: bottom;text-align:right;border-bottom:1px solid #000000;" width="238.11023622px">PERTAMA dan TERBAIK<br />
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">${reqs.company_id and reqs.company_id.name or ''|entity}<br />
+    ${reqs.company_id and reqs.company_id.street or ''|entity}<br />
+    ${reqs.company_id and reqs.company_id.zip or ''|entity} ${reqs.company_id and reqs.company_id.city or ''|entity} - ${reqs.company_id and reqs.company_id.country_id.name or ''|entity}<br />
+    <table style="width: 100%;border-collapse: collapse;">
+    <tr>
+        <td width="200px">Phone: ${reqs.company_id and reqs.company_id.phone or ''|entity}</td>
+    </tr>
+    <tr>
+        <td style="border-bottom:1px solid #000000;">Mail: ${reqs.company_id and reqs.company_id.email or ''|entity}</td>
+    </tr>
+    </table>
+    <br/>
+    <br/>
+      </td>
+      <td style="vertical-align: top;"><br />
+      </td>
+      <td style="vertical-align: top;"><br />
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;" colspan="2"><b>Expected Shipping address :</b><br />
+      %if reqs.dest_address_id:
+      ${reqs.dest_address_id and reqs.dest_address_id.partner_id and reqs.dest_address_id.partner_id.name or ''|entity}<br />
+      ${reqs.dest_address_id and reqs.dest_address_id.street or ''|entity}<br />
+      ${reqs.dest_address_id and reqs.dest_address_id.city or ''|entity},
+      ${reqs.dest_address_id and reqs.dest_address_id.zip or ''|entity}<br />
+      ${reqs.dest_address_id and reqs.dest_address_id.country_id and reqs.dest_address_id.country_id.name or ''|entity}
+      %else:
+      ${reqs.location_id and reqs.location_id.company_id and reqs.location_id.company_id.name or ''|entity}<br />
+      ${reqs.location_id and reqs.location_id.name or ''|entity}<br />
+      ${reqs.location_id and reqs.location_id.address_id.street or ''|entity}<br />
+      ${reqs.location_id and reqs.location_id.address_id.city or ''|entity},
+      ${reqs.location_id and reqs.location_id.address_id.zip or ''|entity}<br />
+      ${reqs.location_id and reqs.location_id.address_id and reqs.location_id.address_id.country_id and reqs.location_id.address_id.country_id.name or ''|entity}
+      %endif
+      </td>
+      <td style="vertical-align: top;">
+      ${reqs.partner_id and reqs.partner_id.name or ''|entity}<br />
+      ${reqs.partner_address_id and reqs.partner_address_id.street or ''|entity}<br/>
+      ${reqs.partner_address_id and reqs.partner_address_id.street2 or ''|entity}<br/>
+      ${reqs.partner_address_id and reqs.partner_address_id.city or ''|entity}<br/>
+      ${reqs.partner_address_id and reqs.partner_address_id.country_id and reqs.partner_address_id.country_id.name}<br />
+      Tel. : ${reqs.partner_address_id and reqs.partner_address_id.phone or ''|entity}<br />
+      Fax. : ${reqs.partner_address_id and reqs.partner_address_id.fax or ''|entity}
+      <br/><br/><br/></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;" colspan="3">
+      <p style="font-weight:bold;font-size:14px;padding:0px;margin:0px;">
+      Request for Quotation : ${reqs.name or '' | entity}</p>
+      </td>
+    </tr>
+    
+    <tr>
+      <td style="vertical-align: top;" colspan="3">
+      <table style="border-collapse:collapse;width:100%;">
+      <tr>
+      <td style="vertical-align:top;text-align:center;font-weight:bold;border: 1px solid black;border-left:0px;">Description</td>
+      <td style="vertical-align:top;text-align:center;font-weight:bold;border: 1px solid black;">Expected Date</td>
+      <td style="vertical-align:top;text-align:center;font-weight:bold;border: 1px solid black;border-right:0px;">Qty</td>
+      </tr>
+      %for no in reqs.order_line:
+      <tr>
+      <td style="vertical-align:top;border-right:1px solid black;">
+      ${no.name or ''|entity}<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;${no.notes or ''|entity}
+      </td>
+      <td style="text-align:center;vertical-align:top;border-right:1px solid black;">
+      %if reqs.minimum_planned_date:
+      ${date_order_fmt(reqs.minimum_planned_date) or '' | n}<br/>
+      %else:
+      &nbsp;<br/>
+      %endif
+      </td>
+      <td style="vertical-align:top;text-align:center;">
+      ${no.product_qty or ''|entity} ${no.product_uom.name or '' | entity}
+      </td>
+      </tr>
+      %endfor
+      <tr>
+      <td style="vertical-align:top;text-align:center;border-bottom:1px solid black;">&nbsp;</td>
+      <td style="vertical-align:top;text-align:center;border-bottom:1px solid black;border-left:1px solid black;"></td>
+      <td style="vertical-align:top;text-align:center;border-bottom:1px solid black;border-left:1px solid black;"></td>
+      </tr>
+      </table>
+      </td>
+    </tr>
+    <tr>
+    <td colspan="3"><br/><br/><br/>
+    <table style="border-collapse: collapse;">
+        <tr>
+        <td style="border: 1px solid #eaeaea;">Shipping Terms :</td>
+        <td style="border: 1px solid #eaeaea;" width="300px">
+        ${reqs.get_purchase_info_by_name(info_name='Shipping Terms')[reqs.id] or '' | n}
+        </td>
+        </tr>
+        <tr>
+        <td style="border: 1px solid #eaeaea;">Pricing Terms :</td>
+        <td style="border: 1px solid #eaeaea;">
+        ${reqs.get_purchase_info_by_name(info_name='Pricing Terms')[reqs.id] or '' | n}
+        </td>
+        </tr>
+        <tr>
+        <td style="border: 1px solid #eaeaea;">Payment Terms :</td>
+        <td style="border: 1px solid #eaeaea;">
+        ${reqs.get_purchase_info_by_name(info_name='Payment Terms')[reqs.id] or '' | n}</td>
+        </tr>
+      </table>
+    </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;" colspan="3"><br/><br/>${reqs.notes or ''|entity}<br/><br/><br/>
+      Regards,<br/><br/><br/><br/><br/>
+      ${ get_user(cr, uid, uid) or ''| n }
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">
+      </td>
+      <td style="vertical-align: top;font-size:10px;">
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br />
+      </td>
+      <td style="vertical-align: top;"><br />
+      </td>
+    </tr>
+  </tbody>
+</table>
+<small>
+<div style="text-align:right;margin-top:300px;">
+page ${counter} of ${loop_page}
+</div></small>
+</body>
+%endfor
+%endif
+%endfor
+%if wrong_state:
+<p style="page-break-after: always"></p>
+<small>
+<br/><br/><br/><br/>
+<b>The following documents are not printed because the state is not valid:</b><br/>
+${', '.join(wrong_state)}
+</small>
+%endif
+</html>

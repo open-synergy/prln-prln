@@ -1,0 +1,627 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<!-##############################################################################################################################################
+															CSS STYLE AND STATEMENTS
+##################################################################################################################################################-->
+
+<head>
+<style type="text/css">
+.table {
+		width: 100%;
+		margin: 0px;
+		padding: 0px;
+		border-spacing: 0px;
+		border-collapse: collapse;
+}
+
+.table_border {
+		border: 1px solid black;
+		font-weight: bold;
+		font-size: 15px;
+		padding-right: 3px;
+		text-align: center;
+		border-spacing: 0px;
+}
+
+.table_line {
+		border-left: 1px solid black;
+		border-collapse: collapse;
+		padding-left: 5px;
+		border-spacing: 0px;
+}
+
+
+.total {
+		text-align: right;
+		font-weight: bold;
+		border-right:1px solid black;
+		padding-right: 3px;
+		border-spacing: 0px;
+}
+
+</style>
+
+</head>
+
+<!--################################################################################################################################################
+								    							 DEKLARASI VARIABEL
+####################################################################################################################################################-->
+<%import math %>
+<%import re%>
+
+<%wrong_document_state = [] %>		<!--Dipakai untuk menyimpan daftar dan status dari dokumen-dokumen yang tidak akan dicetak (status invalid)-->
+<%total_document = len(objects)%>	<!--Dipakai untuk mencek jumlah dokumen-dokumen yang akan dicetak-->
+
+
+<!--KONFIGURASI untuk menentukan jumlah baris dari line item yang ingin dicetak setiap halamannya-->
+<!--Variabel berikut menentukan atau mengikuti 'layout' dari halaman kertas, sehingga menandakan batasan atau limit kertas-->
+<%max_lines = 28%>									<!--Jumlah baris maksimum untuk line item s/d akhir halaman-->
+<%def_footer_lines = 10%>							<!--Jumlah pemakaian baris untuk footer yang akan dicetak setiap halamannya-->
+<%last_page_footer_lines = 8%>						<!--Jumlah pemakaian baris untuk footer yang akan dicetak khusus untuk halaman akhir-->
+<%target_lines = max_lines - def_footer_lines%>		<!--Jumlah line item yang akan dicetak setiap halamannya-->
+
+<!--KONFIGURASI untuk menentukan jumlah dan spesifikasi dari kolom untuk setiap baris line item yang akan dicetak-->
+<%line_item_columns=7%>								<!--Jumlah kolom dari setiap baris line item yang dicetak-->
+<%column_width_in_chars=[3,70,7,6,15,3,16]%>		<!--Lebar masing-masing kolom line item dalam jumlah huruf/karakter-->
+<%max_wrap_lines=3%>								<!--Maksimum jumlah baris yang dibentuk untuk teks yang wrapping, sisa teks yang tidak 'muat' di'buang'-->
+													<!--Nilai satu berarti tidak akan ada wrapping, sehingga semua teks untuk kolom akan di'truncate'-->
+
+<!--HA:KONFIGURASI untuk menentukan running total untuk setiap halaman-->
+<%show_line_item_cum_sum_by_page=False%>					<!--Hitung jumlah total per 'halaman' yang dicetak-->
+
+<!--KONFIGURASI untuk menentukan layout HTML dari formulir-->
+<%preprinted_header_space = 226%>					<!--Blank space untuk area preprinted dari formulir-->
+<%line_item_height = 17%>							<!--Tinggi dari setiap line item yang dicetak-->
+<%font_size = 13%>									<!--Ukuran tulisan yang digunakan secara umum, dapat di-override apabila font-size juga ditentukan pada setiap tr atau td-->
+<%page_width = 793%>						        <!--Lebar formulir yang umum digunakan sebagai lebar tabel utama-->
+
+
+<!--Proses semua dokumen satu per satu-->
+%for inv in objects :
+
+	<!--Menentukan kondisi status object untuk data yang dicetak-->
+	%if inv.state != 'open' and inv.state != 'paid':
+		<!--Seluruh dokumen yang statusnya invalid akan di'catat' untuk kemudian diinfokan ke pengguna-->
+		<% wrong_document_state.append('%s: %s' % (inv.name, inv.state)) %>
+	%else:
+		<!--Hanya proses dokumen dengan status yang valid-->
+
+		<!----------------------------------------------------------------------------------------------------------------------------------------------
+		PRA-PROSES DATA: bagian ini adalah untuk memproses data line item yang akan dicetak.  Diperlukan proses awal (preprocessing) di mana teks atau
+		deskripsi dari line item yang akan dicetak di'parsing' untuk menentukan apakah akan ada 'wrapping' atau tidak.  Jika wrapping akan terjadi, maka
+		teks yang telah dibaca akan dipotong/split ke baris berikutnya (jumlah maksimum baris ditentukan oleh variabel max_wrap_lines).
+		Hasil akhir dari preprocessing data ini adalah suatu list dari baris atau line item yang akan dicetak (secara data type berupa list of list).
+		Untuk setiap baris yang juga berupa list data type, akan berisikan teks yang akan dicetak bagi masing-masing kolomnya.
+		-------------------------------------------------------------------------------------------------------------------------------------------------->
+		<!--A. Menghitung baris line item yang akan dicetak-->
+		<!--Hitung jumlah produk atau line item yang akan diproses untuk dicetak-->
+		<%total_products = len(inv.invoice_line)%>
+
+		<!--Siapkan variabel 'penyimpanan'-->
+		<%line_item_print=[]%>	    	<!--Tempat untuk menyimpan semua teks dari produk atau 'line item' yang telah di proses mengikuti konfigurasi kolom-->
+		<%total_lines_print=0%>		    <!--Jumlah baris yang harus dicetak-->
+        <%line_item_sum_by_page=[]%>    <!--Jumlah atau total dari seluruh line item untuk setiap halamannya-->
+        <%line_item_to_sum=[]%>         <!--HA:List dari seluruh nilai line item yang akan/dapat dijumlah-->
+
+<!--################################################################################################################################################
+								    					     PRE-PROCESSING LOGIC LINE ITEM
+####################################################################################################################################################-->
+
+		<!--Proses semua produk di dalam dokumen yang dimaksud-->
+		%for prod_no in range (0,total_products):
+			<!--Ambil atau proses produk atau 'line item'nya-->
+			<%prod = inv.invoice_line[prod_no]%>
+
+<!--================================================================== EDITABLE AREA ===============================================================-->
+
+			<!--Tempat sementara untuk menyimpan data setiap produk atau 'line item'-->
+			<%str_holder=[]%>
+			<!--Proses seluruh kolom menjadi satu list-->
+			<!--Kolom 1: no urut produk-->
+			<%str_holder.append(str(prod_no + 1))%>
+			<!--Kolom 2: nama produk-->
+			<!--Buang kode produk (substitusikan seluruh teks dari awal s/d tanda ']' dengan empty string)-->
+			<%prod_line_desc = re.sub(r'.*]', "", prod.name)%>
+			<%str_holder.append(prod_line_desc)%>
+			<!--Kolom 3: jumlah/kuantitas produk-->
+			<%str_holder.append(formatLang(prod.quantity, digits=0))%>
+			<!--Kolom 4: satuan unit (UOM) produk-->
+			<%str_holder.append(prod.uos_id.name or '')%>
+			<!--Kolom 5: harga satuan produk-->
+			<% subtotal = (prod.discount != 100.0) and ((prod.price_subtotal * 100) / (100 - (prod.discount or 0.0))) or 0.0%>
+			<% price_unit = prod.quantity and ((subtotal or 0.00) / prod.quantity) or 0.0 %>
+			<%str_holder.append(formatLang(price_unit))%>
+            <!--Kolom 6: Satuan unit price-->
+			<%str_holder.append("Rp.")%>
+			<!--Kolom 7: harga jual produk-->
+			<%str_holder.append(formatLang(subtotal, digits=0))%>
+			<% disc = (subtotal * prod.discount) / 100 %>
+            <!--HA:Setiap nilai atau kolom yang akan dicari running totalnya disimpan ke dalam list ini-->
+            <%line_item_to_sum.append(subtotal)%>
+
+<!--================================================================================================================================================-->
+
+			<!--Untuk setiap produk yang diproses, kita tambahkan satu list baru, jika terdapat wrapping akan diproses/tambahkan di bagian wrapping-->
+			<%no_lines=0%>
+			<%line_item_print.append([])%>
+			<%wrappable_column=0%>
+
+			<%rv = wrap_line(str_holder, column_width_in_chars, line_item_columns)%>
+
+			<!--Ambil teks yang terbaru atau yang sudah diproses wrapping-nya-->
+			<%str_holder = rv[1][:]%>
+			<%line_item_print[total_lines_print] = rv[2][:]%>
+
+			<!--Jika terdapat baris yang diproses, maka naikkan counter (hitungan)-->
+			%if rv[0] >= 0:
+				<%no_lines = no_lines + 1%>
+				<%total_lines_print = total_lines_print + 1%>
+			%endif
+			%while (no_lines < max_wrap_lines) and (rv[0] > 0):
+				<%line_item_print.append([])%>
+				<%rv=wrap_line(str_holder, column_width_in_chars, line_item_columns)%>
+
+				<!--Ambil teks yang terbaru atau yang sudah diproses wrapping-nya-->
+				<%str_holder = rv[1][:]%>
+				<%line_item_print[total_lines_print] = rv[2][:]%>
+
+				<%no_lines = no_lines + 1%>
+				<%total_lines_print = total_lines_print + 1%>
+			%endwhile
+		%endfor
+
+<!--================================================================== EDITABLE AREA ===============================================================-->
+
+		<!--For testing only: adding dummy line items-->
+		<!--%test_lines = total_lines_print + 50%-->
+		<!--%for line_number in range(total_lines_print,test_lines):-->
+			<!--%line_item_print.append([str(line_numb1)er+,'12345678901234567890123456890','B','C','D','E','F'])%-->
+		<!--%endfor-->
+		<!--%total_lines_print = test_lines--%>
+
+<!--================================================================================================================================================-->
+
+		<!--B. Menghitung jumlah halaman formulir berdasarkan perhitungan target_lines-->
+		<% total_page = total_lines_print / target_lines%>
+		%if last_page_footer_lines <= def_footer_lines:
+			<!--Footer untuk halaman akhir akan muat, sehingga tidak perlu dibuatkan halaman terakhir tambahan-->
+			<%blank_last_page = False%>
+			<%compact_page = False%>
+			%if math.fmod(total_lines_print, target_lines) > 0:
+				<!--Jika terdapat sisa baris,maka sisa baris tersebut akan dicetak dihalaman baru, yaitu halaman terakhir-->
+				<%total_page = total_page + 1%>
+			%endif
+		%else:
+			<!--Footer untuk halaman akhir bisa bisa 'memakan' area line items, sehingga mungkin perlu dibuatkan halaman baru-->
+			<%compact_page = True%>
+			%if math.fmod(total_lines_print, target_lines) == 0:
+				<!--Jika tidak terdapat sisa baris,maka footer halaman akhir akan dicetak di halaman baru-->
+				<%total_page = total_page + 1%>
+				<%blank_last_page = True%>
+			%elif (math.fmod(total_lines_print, target_lines) + last_page_footer_lines) > max_lines:
+				<!--Jika terdapat sisa baris dan area footer tidak cukup, maka akan ditambahkan 2 halaman baru-->
+				<%total_page = total_page + 2%>
+				<%blank_last_page = True%>
+			%else:
+				<%total_page = total_page + 1%>
+				<%blank_last_page = False%>
+			%endif
+		%endif
+
+		<%current_line = 0%>
+
+<!--##################################################################################################################################################
+															BAGIAN PRE-PRINTED LAPORAN (LOGO)
+####################################################################################################################################################-->
+
+<!--pengaturan body dan tabel formulir-->
+<body style="font-size: ${font_size}px; font-family: Sans-Serif; margin: 0px">
+
+		<!--Looping untuk menghasilkan ('render') halaman dari formulir-->
+		%for current_page in range(1, total_page + 1):
+<table style="text-align: left; width: ${page_width}px; margin: 0; padding: 0;" cellpadding="0" cellspacing="0">
+	<tbody>
+		<tr>
+			<!--Blank space untuk area preprinted dari formulir-->
+			<td colspan="3" rowspan="1" style="vertical-align: top;">
+				<div style="height: ${preprinted_header_space}px;"></div>
+			</td>
+		</tr>
+
+<!--##################################################################################################################################################
+															BAGIAN HEADER LAPORAN (INFO PARTNER)
+####################################################################################################################################################-->
+
+         <tr>
+            <!-- Area nama forulir, nomor formulir-->
+            <td style="vertical-align: top; text-align: center; width: 100%" colspan="6">
+                <div style="height: 60px;">
+                <table style="vertical-align: middle;">
+                    <tr>
+                        <td style="align: left; width: 320px;">
+                        </td>
+                        <td style="border-bottom: 1px solid black; padding-bottom: 5px; text-align: center; font-size: 20px;">
+                            <center><b>FAKTUR</b></center>
+                        </td>
+                        <td style="align: left; width: 160px;">
+                        </td>
+
+                        <!-- Area tanggal formulir-->
+                        <td style="vertical-align: top; text-align: left; font-size: ${font_size}px;"><b>Tanggal :</b>
+                        ${inv.date_invoice and date_order_fmt(inv.date_invoice) or '' | n}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="align: left; width: 320px;">
+                        </td>
+                        <td style="padding-top:5px; font-size:${font_size}px;"><b>No.${inv.number or ''|entity}</b>
+                        </td>
+                    </tr>
+                </table>
+                </div>
+            </td>
+        </tr>
+
+        <!-- Area garis pada formulir-->
+        <tr>
+            <td colspan="5" height="1px"><hr style="padding: 0px; margin: 0px; height: 2px; background: #000;">
+                <div style="height: 5px;">
+                </div>
+            </td>
+        </tr>
+
+        <!-- Area Info partner-->
+        <tr height="83px">
+            <td colspan="5">
+                <div style="height: 100px;">
+                <table>
+                    <tr>
+                        <td style="vertical-align: top; width: 20px; font-size:${font_size}px"><b>Nama Pembeli</b></td>
+                        <td style="vertical-align: top; width: 1px; font-size:${font_size}px">:</td>
+                        <td style="vertical-align: top; width: 800px; font-size:${font_size}px">P. ${inv.partner_id and inv.partner_id.name or ''|entity}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top; width: 250px; font-size:${font_size}px"><b>Alamat</b></td>
+                        <td style="vertical-align: top; width: 1px; font-size:${font_size}px">:</td>
+                        <td style="vertical-align: top; width: 800px; font-size:${font_size}px">
+                        ${inv.address_invoice_id and inv.address_invoice_id.street or ''|entity}<br/>
+                        ${inv.address_invoice_id and inv.address_invoice_id.city or ''|entity}
+                        ${inv.address_invoice_id and inv.address_invoice_id.zip or ''|entity}<br/>
+                        ${inv.address_invoice_id and inv.address_invoice_id.country_id and inv.address_invoice_id.country_id.name or ''|entity}
+                        </td>
+                        <td style="vertical-align: top;"></td>
+                        <td style="vertical-align: top;"></td>
+                        <td style="vertical-align: top;"></td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top; width: 250px; font-size:${font_size}px"><b>N.P.W.P</b>
+                        </td>
+                        <td style="vertical-align: top; width: 1px;">:<br>
+                        </td>
+                        <td style="vertical-align: top; width: 80px;">
+                            <div style="width: 450px;">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                    <% npwp = filter_npwp(inv.partner_id and inv.partner_id.partner_info or [])%>
+                                    %for n in (npwp  + [' '] * 20)[:20]:
+                                        <td style="border:1px solid black; width:18px; height:18px; text-align: center; font-size:${font_size}px">${n | entity}
+                                        </td>
+                                    %endfor
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </td>
+                        <td colspan="2" rowspan="1" style="vertical-align: top;">
+                            <table style="text-align: left; width: 154px;" cellpadding="2" cellspacing="2">
+                                <tbody>
+                                    <tr>
+                                        <td style="vertical-align: top;">PKP<br>
+                                        </td>
+                                        <td style="vertical-align: top; border:1px solid black; width:18px; font-size: ${font_size}px">
+                                            <center>${len(npwp) and "V" or ''}</center>
+                                        </td>
+                                        <td style="vertical-align: top; width:85px; text-align: right; font-size:${font_size}px;">Bukan PKP<br>
+                                        </td>
+                                        <td style="vertical-align: top; border:1px solid black; width:18px; font-size:${font_size}px">
+                                            <center>${len(npwp) == 0 and "V" or ''}</center>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </div>
+            </td>
+        </tr>
+
+
+<!--##################################################################################################################################################
+													BAGIAN BODY / LINE ITEM LAPORAN (TABEL ITEM)
+####################################################################################################################################################-->
+
+        <!--Area untuk pencetakan line item-->
+        <tr>
+            <td colspan="5" rowspan="1" style="vertical-align: top;">
+            %if current_page == total_page:
+                <!--div untuk mendorong sisa footer sehingga page number bisa tetap di akhir halaman (untuk last page)-->
+                <div style="height: 690px;">
+                <table class="table" cellspacing="0" cellpadding="0">
+            %else:
+                <!--div Untuk mendorong sisa footer sehingga page number bisa tetap di akhir halaman-->
+				<div style="height: 690px;">
+                <table class="table" cellspacing="0" cellpadding="0">
+            %endif
+                <tbody>
+                    <tr>
+					    <td colspan="9">
+   						    <table class="table" cellpadding="3">
+        					<tbody>
+
+                                <!--Cetak header dari area line item -->
+                                <tr style="border-top:double;">
+                                    <td style="width: 5%; font-family: Sans-Serif;" class="table_border">No.<br>
+                                    </td>
+                                    <td style="width: 55%; font-family: Sans-Serif;" class="table_border">Nama Barang Kena Pajak<br>
+                                    </td>
+                                    <td style="width: 10%; font-family: Sans-Serif;" class="table_border" colspan="2">Kuantum<br>
+                                    </td>
+                                    <td style="width: 11%; font-family: Sans-Serif;" class="table_border">Harga Satuan<br>
+                                    </td>
+                                    <td style="width: 20%; font-family: Sans-Serif;" class="table_border" colspan="2">Harga Jual<br>
+                                    </td>
+                                </tr>
+
+                <!--tampilan detail item body-->
+
+			    <!--Menentukan-->
+			    %if compact_page and (current_page == total_page):
+				    <%last_line = current_line + (max_lines - last_page_footer_lines)%>
+			    %else:
+				    <%last_line = current_line + target_lines%>
+			    %endif
+
+                <!--HA:Tambahkan running total untuk halaman yang akan diproses ini-->
+                <%line_item_sum_by_page.append(0)%>
+                %if show_line_item_cum_sum_by_page and (current_page > 1):
+                    <%line_item_sum_by_page[current_page-1] = line_item_sum_by_page[current_page-2]%>
+                %endif
+
+			    %for line_no in range (current_line,last_line):
+				    %if line_no < total_lines_print:
+
+                        <!--HA:Penghitungan running total untuk halaman yang diproses-->
+                        <!--Jika no urut bukan nol (0), maka diasumsikan item dengan nomor urut tersebut (di kurangi 1 karena 0 indexing)-->
+                        <!--akan dirunning totalkan-->
+                        %if line_item_print[line_no][0] != '':
+                            <%line_item_sum_by_page[current_page-1] = line_item_sum_by_page[current_page-1] + line_item_to_sum[int(line_item_print[line_no][0])-1]%>
+                        %endif
+
+                                <!--Cetak line item yang telah diproses dari dokumen yang dimaksud-->
+                                <tr>
+                                    <td class="table_line" style="text-align: center; height:${line_item_height}px;">
+                                        ${line_item_print[line_no][0]}
+                                    </td>
+                                    <td class="table_line" style="text-align: left; height:${line_item_height}px;">
+                                        ${line_item_print[line_no][1]}
+                                    </td>
+                                    <td class="table_line" style="text-align: right; height:${line_item_height}px;">
+                                        ${line_item_print[line_no][2]}
+                                    </td>
+                                    <td style="text-align: left; padding-right: 2px; height:${line_item_height}px;">
+                                        ${line_item_print[line_no][3]}
+                                    </td>
+                                    <td class="table_line" style="height:${line_item_height}px; text-align: right; padding-right:5px;">
+                                        <div style ="width: 75px; border: 1px solid white;">
+                                        ${line_item_print[line_no][4]}</div>
+                                    </td>
+                                    <td class="table_line" style="text-align: left; height:${line_item_height}px;">
+                                        <div style="width: 25px; border: 1px solid white;">
+                                        ${line_item_print[line_no][5]}</div>
+                                    </td>
+                                    <td style="border-right: 1px solid black; text-align: right; padding-right: 5px; height:${line_item_height}px;">
+                                        <div style="width: 100px; border: 1px solid white; text-align: right">
+                                        ${line_item_print[line_no][6]}</div>
+                                    </td>
+                                </tr>
+                        <% disc = (subtotal * prod.discount) / 100 %>
+                    %else:
+                                <!--Cetak baris line item 'kosong', untuk mem-fill sisa tabel line item-->
+	          					<tr>
+                                    <td class="table_line" style="text-align: center; height:${line_item_height}px;">
+                                    </td>
+                                    <td class="table_line" style="text-align: left; height:${line_item_height}px;">
+                                    </td>
+                                    <td class="table_line" style="text-align: right; height:${line_item_height}px;">
+                                    </td>
+                                    <td style="text-align: left; height:${line_item_height}px;">
+                                    </td>
+                                    <td class="table_line" style="text-align: right; height:${line_item_height}px;">
+                                    </td>
+                                    <td class="table_line" style="text-align: left; height:${line_item_height}px;">
+                                    </td>
+                                    <td style="border-right: 1px solid black; text-align: right; height:${line_item_height}px;">
+                                    </td>
+								</tr>
+                    %endif
+			    %endfor
+
+			        <%current_line = last_line%>
+								<!--Cetak baris kosong di bagian bawah tabel line item (ini adalah filler)-->
+								<tr>
+	          						<td style="border-left: 1px solid black; border-bottom: 1px solid black;"></td>
+	      	   						<td style="border-left: 1px solid black; border-bottom: 1px solid black;"></td>
+	       	   						<td style="border-left: 1px solid black; border-bottom: 1px solid black;" colspan="2"></td>
+	          						<td style="border-left: 1px solid black; border-bottom: 1px solid black;"></td>
+	          						<td style="text-align: right; border-left: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black" colspan="2">
+                                    ${current_page == total_page and "&nbsp;" or "Dipindahkan"}
+                                    </td>
+	         					</tr>
+        					</tbody>
+     						</table>
+      					</td>
+					</tr>
+
+<!--##################################################################################################################################################
+													BAGIAN FOOTER LAPORAN (SIGNATURE, TOTAL)
+####################################################################################################################################################-->
+
+                     <!-- Area cetak jumlah harga jual-->
+                    <tr>
+                        <td colspan="6" rowspan="1" style="height: 35px;  text-align: left; padding-left: 5px; width: 10px; vertical-align: middle; border-left: 1px solid black; border-right: 1px solid black; font-size: ${font_size}px;">
+                            <div style="width: 634px; border: 1px solid white;">
+                            <b>Jumlah Harga Jual</b><br>
+                            </div>
+                        </td>
+                        <td style="font-size:${font_size}px; padding-left: 4px; text-align: left; border-bottom: 1px solid black;">
+                             <div style="width: 25px; border: 1px solid white;">
+                             Rp.
+                             </div>
+                        </td>
+                        <td style="vertical-align: middle; width:150px; text-align: right; padding-right: 5px; border-right: 1px solid black; font-size: ${font_size}px">
+                            ${current_page >= total_page and formatLang(sum_subtotal(inv.invoice_line), digits=0) or ''}
+                        </td>
+                    </tr>
+
+                    <!-- Area cetak dikurangi potongan harga (diskon)-->
+                    <tr>
+                        <td colspan="6" rowspan="1" style="height: 35px; vertical-align: middle; text-align: left; padding-left: 5px; border: 1px solid black; font-size: ${font_size}px">
+                            <b>Dikurangi Potongan Harga</b><br>
+                        </td>
+                        <td style="font-size:${font_size}px text-align: left; padding-left: 4px; border-bottom: 1px solid black;">Rp.
+                        </td>
+                        <td style="vertical-align: middle; height: 35px; text-align: right; padding-right: 5px; border-top: 1px solid black; border-right: 1px solid black; font-size: ${font_size}px">
+                            ${current_page >= total_page and formatLang(sum_discount(inv.invoice_line), digits=0) or ''}
+                        </td>
+                    </tr>
+
+                    <!-- Area cetak dasar pengenaan pajak-->
+                    <tr>
+                        <td colspan="6" rowspan="1" style="height: 35px; vertical-align: middle; text-align: left; padding-left: 5px; border: 1px solid black; font-size: ${font_size}px">
+                            <b>Dasar Pengenaan Pajak</b><br>
+                        </td>
+                        <td style="font-size:${font_size}px text-align: left; padding-left: 4px; border-bottom: 1px solid black;">Rp.
+                        </td>
+                        <td style="vertical-align: middle; text-align: right; padding-right: 5px; border-top: 1px solid black; border-right: 1px solid black; font-size: ${font_size}px">
+                            ${current_page >= total_page and formatLang(get_base(inv.invoice_line), digits=0) or ''}
+                        </td>
+                    </tr>
+
+                    <!-- Area cetak PPN-->
+                    <tr>
+                        <td colspan="6" rowspan="1" style="height: 35px; vertical-align: middle; text-align: left; padding-left: 5px; border: 1px solid black; font-size: ${font_size}px">
+                            <b>PPN = 10% x Dasar Pengenaan Pajak</b><br>
+                        </td>
+                        <td style="font-size:${font_size}px text-align: left; padding-left: 4px; border-bottom: 1px solid black;">Rp.
+                        </td>
+                        <td style="vertical-align: middle; text-align: right; padding-right: 5px; border-top: 1px solid black; border-right: 1px solid black; font-size: ${font_size}px">
+                            ${current_page >= total_page and formatLang(get_ppn(inv.invoice_line), digits=0) or ''}
+                        </td>
+                    </tr>
+
+                    <!-- Area cetak Total-->
+                    <tr>
+                        <td colspan="6" rowspan="1" style="height: 38px; vertical-align: middle; text-align: left; padding-left: 3px; border: 1px solid black; font-size: ${font_size}px">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <b>Total&nbsp;&nbsp;&nbsp;</b>
+                                    </td>
+                                    <td style="height: 1px;">
+                                        ${inv.amount_total and current_page >= total_page and amount_say(abs(inv.amount_total))[0:200] or '' | entity}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="font-size:${font_size}px text-align: left; padding-left: 4px; border-bottom: 1px solid black;">Rp.
+                        </td>
+                        <td style="vertical-align: middle; text-align: right; border-top: 1px solid black; padding-right: 5px; border-bottom: 1px solid black; border-right: 1px solid black; padding-bottom: 0px; font-size: ${font_size}px">
+                        ${current_page >= total_page and formatLang(inv.amount_total, digits=0) or ''}
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+                </div>
+            </td>
+        </tr>
+
+        <!-- Area cetak tanggal jatuh tempo pembayaran-->
+        <tr>
+            <td colspan="4" rowspan="1" style="vertical-align: middle; font-size: ${font_size}px; text-align: ledt; padding-left: 5px;">
+                <div style="height:8px;">
+                <b>Tanggal Jatuh Tempo Pembayaran : </b>&nbsp;${inv.date_due and date_order_fmt(inv.date_due) or '' | n}
+            </td>
+            <td style="vertical-align: top;">
+            </td>
+            <td style="vertical-align: top;">
+            </td>
+            <td style="vertical-align: top;">
+            </td>
+        </tr>
+
+
+        <!-- Area cetak tanda tangan-->
+        <tr>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td style="vertical-align: bottom; text-align: left;"><br><br><br><br>
+            <div style="height: 10px;">
+            ${current_page >= total_page and 'Gunawan Rusli' or ''}
+            </div>
+            <td>
+            </td>
+            <td>
+            </td>
+        </tr>
+
+        <!--Area tampilan no halaman-->
+        <tr>
+		    %if current_page != total_page:
+			<td style="text-align: right; vertical-align: bottom;" colspan="5" rowspan="1">
+			    page ${current_page} of ${total_page}
+			</td>
+			%else:
+			<td style="text-align: right; vertical-align: bottom;" colspan="5" rowspan="1">
+				page ${current_page} of ${total_page}
+			</td>
+			%endif
+		</tr>
+    </tbody>
+</table>
+
+            %if current_page < total_page:
+			<p style="page-break-after:always; margin: 0px;"></p>
+			%endif
+		%endfor
+</body>
+
+		    <!-- Tambahkan page break kecuali untuk dokumen terakhir-->
+		    %if total_document > 1:
+		        <p style="page-break-after:always; margin: 0px;"></p>
+			    <%total_document = total_document - 1 %>
+		    %endif
+	%endif
+%endfor
+
+<!--##################################################################################################################################################
+																WRONG STATE STATEMENT
+####################################################################################################################################################-->
+
+%if wrong_document_state:
+<p style="page-break-after:always"></p>
+<small>
+<br/><br/><br/>
+<b>Dokumen-dokumen ini tidak dicetak karena statusnya:</b><br/>
+${', '.join(wrong_document_state)}
+</small>
+%endif
+</html>

@@ -1,0 +1,210 @@
+<html><head></head>
+<% wrong_state = [] %>
+<% first_page = True %>
+%for sto in objects :
+<body>
+%if first_page:
+<% first_page = False %>
+%else:
+<p style="page-break-after:always;"></p>
+%endif
+<!-- div id="tableTop"
+     style="position: relative; width: 1240px; height: 560px; z-index: -999999; left: 8px; top: 408px;  border-top: 2px double rgb(255, 0, 0); border-bottom: 2px solid rgb(255, 0, 0); border-left: none; border-right: none;">
+</div>
+<div id="headerBottom"
+     style="position: relative; width: 1240px; height: 530px; z-index: -999999; left: 8px; top: 438px;  border-top: 2px solid rgb(255, 0, 0); border-bottom: none; border-left: none; border-right: none;">
+</div>
+<div id="vertLine12"
+     style="position: relative; width: 775px; height: 561px; z-index: -999999; left: 58px; top: 408px;  border-top: none; border-bottom: none; border-left: 2px solid rgb(255, 0, 0); border-right: 2px solid rgb(255, 0, 0);">
+</div>
+<div id="vertLine34"
+     style="position: relative; width: 200px; height: 561px; z-index: -999999; left: 1033px; top: 408px;  border-top: none; border-bottom: none; border-left: 2px solid rgb(255, 0, 0); border-right: none;">
+</div -->
+<div style="height:1750px;">
+	<table style="width:1000px;">
+		<tbody><tr height="140px">
+			<td></td>
+		</tr>
+	</tbody></table>
+
+<table style="width:1240px;">
+<tbody><tr>
+<td width="410px">
+	<table>
+	<tbody><tr>
+	<td align="left" style="font-family:arial;font-size: 22px;" width="360px"><div><pre><br></pre>Kepada Yth :</div></td>
+	</tr>
+	<tr>
+	<td align="left" width="360px"><div style="font-family:arial;font-size: 22px;"> 
+    <% end_user = ' '.join([sto.area_address_id and sto.area_address_id.name or '', sto.area_address_id and sto.area_address_id.street or '', sto.area_address_id and sto.area_address_id.city or '']) %>
+    
+    %if len(end_user) == 2 or len(end_user) == 0:
+       ${sto.address_id and sto.address_id.partner_id and sto.address_id.partner_id.name or ''|entity}
+       <br>${sto.address_id and sto.address_id.street or ''|entity}
+       <br>${sto.address_id and sto.address_id.city or ''|entity} ${sto.address_id.zip or ''|entity}
+       <br>${sto.address_id and sto.address_id.state_id and sto.address_id.state_id.name or ''|entity} - ${sto.address_id and sto.address_id.country_id and sto.address_id.country_id.name or ''|entity}
+    %else:
+         ${sto.area_address_id and sto.area_address_id.partner_id and sto.area_address_id.partner_id.name or ''|entity} 
+         <br>${sto.area_address_id and sto.area_address_id.street or ''|entity} ${sto.area_address_id.zip or ''|entity} 
+         <br>${sto.area_address_id and sto.area_address_id.city or ''|entity} 
+         <br>${sto.area_address_id and sto.area_address_id.state_id and sto.area_address_id.state_id.name or ''|entity}  ${sto.area_address_id and sto.area_address_id.country_id and sto.area_address_id.country_id.name or ''|entity} 
+    %endif
+<br>
+	</div></td>
+	</tr>
+	</tbody></table>
+</td>
+<td width="500px">
+	<table>
+	<tbody><tr>
+	<td align="left" width="500px"><div style="font-family:arial;font-size:34px;" width="700px"><b>SURAT JALAN<b></b></b></div></td>
+	</tr>
+	<tr>
+	<td align="left" width="500px"><div style="font-family:arial;font-size:22px;" width="700px">No. ${sto.name or ''|entity}<br>
+	Tgl. 
+    <%today = time.strftime("%Y-%m-%d")%>
+	<%state = sto.state%>
+    %if state == 'assigned':
+    ${date_order_fmt(today)|n}
+    %elif state =='done':
+    ${date_order_fmt(sto.date_done)|n}
+    %else:
+	${''}
+	%endif
+	</div></td>
+	</tr>
+	</tbody></table>
+</td>
+<td align="right" width="330px"><!--
+	<table style="border-collapse:collapse;">
+	<tr>
+	<td align='center' width=90px><div style="font-family:arial;font-size:13px;">Kasie. Delivery
+	<td align='center' width=90px><div style="font-family:arial;font-size:13px;">F. Mgr.
+	</tr>
+
+	<tr height=15px>
+	<td align='center' width=80px style="border:1px solid black;border-collapse:collapse;"><div style="font-family:arial;font-size:10px;"></td>
+	<td align='center' width=80px style="border:1px solid black;border-collapse:collapse;"><div style="font-family:arial;font-size:10px;"></td>
+	</tr>
+
+	<tr height=75px>
+	<td align='center' width=80px style="border:1px solid black;border-collapse:collapse;"><div style="font-family:arial;font-size:10px;"></td>
+	<td align='center' width=80px style="border:1px solid black;border-collapse:collapse;"><div style="font-family:arial;font-size:10px;"></td>
+	</tr>
+	</table> -->
+</td>
+</tr>
+</tbody></table>
+<table width="1240px">
+<tbody><tr>
+<td width="360px">&nbsp;</td>
+<td width="360px">&nbsp;</td>
+<td width="530px">
+	<table border="1" align="right" style="border-collapse:collapse;font-size: 22px;">
+	<tbody><tr height="20px">
+	<td colspan="2" width="530px">
+	No. Order : ${sto.sale_id and sto.sale_id.client_order_ref or '' | entity}
+	</td>
+	</tr>
+	<tr height="20px">
+	<td colspan="2" width="530px">
+	Tgl. Order : 
+	${sto.sale_id.origin or ''|entity}
+	</td>
+	</tr>
+	</tbody></table>
+</td>
+</tr><tr>
+</tr></tbody></table>
+
+<p style="font-family:arial;font-size: 22px;">Dengan hormat,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Agar diterima dalam keadaan baik, barang - barang sbb :
+</p>
+    <table style="width:1240px;height: 700px;border-collapse:collapse;font-size: 20px;" width="100%">
+	<tbody><tr height="30px">
+    	<td align="center" width="50px" style="border-top:1px double black;border-bottom:1px solid black;border-right:1px solid black;">No.</td>
+    	<td align="center" width="950px" style="border-top:1px double black;border-bottom:1px solid black;border-right:1px solid black;">Nama Barang / Ukuran</td>
+    	<td align="center" width="150px" style="border-top:1px double black;border-bottom:1px solid black;border-right:1px solid black;">Jumlah</td>
+    	<td align="center" width="150px" style="border-top:1px double black;border-bottom:1px solid black;">Satuan</td>
+	</tr>
+    <%count = 1%>
+    %for t in sto.move_lines : 
+    <tr style="vertical-align: top;font-size: 22px;">
+		<td align="center" width="50px" height="15px" style="padding-left: 5px;padding-right: 5px;border-right:1px solid black;">
+            ${count}
+            <%count +=1%>
+        </td>
+		<td align="left" width="950px" style="padding-left: 5px;padding-right: 5px;border-right:1px solid black;">
+            ${ t.product_id.name or ''|entity }
+        </td>
+		<td align="center" width="150px" style="padding-left: 5px;padding-right: 5px;border-right:1px solid black;text-align: right">
+            ${ formatLang(t.product_qty, digits=0) or ''|entity }
+        </td>
+		<td align="center" width="150px" style="padding-left: 5px;padding-right: 5px;">
+            ${ t.product_uom.name or ''|entity }
+        </td> 
+    </tr>
+    %endfor
+    <tr>
+        <td align="center" width="50px" style="border-right:1px solid black;border-bottom:1px solid black;"></td>
+        <td align="left" width="950px" style="border-right:1px solid black;border-bottom:1px solid black;"></td>
+        <td align="center" width="150px" style="border-right:1px solid black;border-bottom:1px solid black;"></td>
+        <td align="center" width="150px" style="border-bottom:1px solid black;"></td> 
+    </tr>
+</tbody></table>
+<p style="font-family:arial;font-size: 22px;"><u>KETERANGAN :</u></p>
+<pre style="font-family:arial;font-size: 20px;">${sto.note or ''|entity}<br><br><br>
+<table style="width:1240px; border-top:1px solid black; border-bottom:1px solid black; border-collapse:collapse;">
+	<tbody><tr height="60px">
+	<td align="left" width="433px" style="font-size: 20px;">Tgl. Pengiriman : 
+    ${date_order_fmt(today)|n}
+	<br>
+					No. Kendaraan : </td>
+	<td align="left" style="border-left:1px solid black;font-size: 20px;" width="434px">No. Packing List : </td>
+	<td align="left" style="border-left:1px solid black;font-size: 20px;" width="433px">No. Perintah Pengiriman : ${sto.sale_id and sto.sale_id.name or ''|entity}</td>
+	</tr>
+</tbody></table>
+<table style="width:1240px;">
+<tbody><tr>
+<td>
+	<table>
+	<tbody><tr>
+	<td align="center" width="470px" style="font-size: 22px;">Yang Menerima,<br><br><br><br><br><br><br>
+	(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)
+	</td>
+	</tr>
+	</tbody></table>
+</td>
+<td>
+	<table border="1" style="border-collapse:collapse">
+	<tbody><tr>
+	<td align="left" style="font-family:arial;font-size:14px;" width="500px">1. Harap barang dihitung dan di check, sebelum Surat Jalan di t.t.<br>
+					2. Claim tidak dilayani jika Surat Jalan sudah di t.t.
+	</td>
+	</tr>
+	</tbody></table>
+</td>
+<td>
+	<table>
+	<tbody><tr>
+	<td align="center" width="470px" style="font-size: 22px;">Yang menyerahkan,<br><br><br><br><br><br><br>
+	( Kabag. Logistik )
+	</td>
+	</tr>
+	</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</pre></div>
+</body>
+
+%endfor
+%if wrong_state:
+<small>
+<br><br><br>
+<b>The following documents are not printed because the state is not valid:</b><br>
+${', '.join(wrong_state)}
+</small>
+%endif
+
+</html>

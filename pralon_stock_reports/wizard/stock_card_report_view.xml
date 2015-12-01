@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<openerp>
+  <data>
+
+    <record id="action_pralon_stock_card"
+	    model="ir.actions.act_window">
+      <field name="name">Stock Card</field>
+      <field name="res_model">via.jasper.report</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">form</field>
+      <field name="view_id" ref="via_jasper_report_utils.via_jasper_report_main_form_view"/>
+      <field name="context">{'via_jasper_report_utils.rpt_name': 'Stock Card'}</field>
+      <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_pralon_stock_card"
+	      name="Stock Card"
+	      parent="menu_pralon_reporting_stock_root"
+	      action="action_pralon_stock_card"
+	      groups="stock.group_stock_manager"/>
+  </data>
+</openerp>

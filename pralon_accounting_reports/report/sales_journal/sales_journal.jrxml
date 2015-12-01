@@ -1,0 +1,862 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sales_journal" language="groovy" pageWidth="1190" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="1150" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true">
+	<property name="ireport.zoom" value="1.9487171000000163"/>
+	<property name="ireport.x" value="1152"/>
+	<property name="ireport.y" value="0"/>
+	<style name="0" isBlankWhenNull="true"/>
+	<style name="1" style="0" fontSize="10" isBold="true">
+		<box bottomPadding="20"/>
+	</style>
+	<style name="2" style="0" hAlign="Left" vAlign="Top" fontSize="8">
+		<box leftPadding="1" rightPadding="1"/>
+	</style>
+	<style name="2.1" style="2" isBold="true">
+		<box>
+			<leftPen lineWidth="0.2"/>
+			<bottomPen lineWidth="0.2"/>
+		</box>
+	</style>
+	<style name="2.1.1" style="2.1" hAlign="Center"/>
+	<style name="2.1.2" style="2.1" hAlign="Center"/>
+	<style name="2.1.3" style="2.1" hAlign="Center"/>
+	<style name="2.2" style="2"/>
+	<style name="2.2.1" style="2.2" hAlign="Right"/>
+	<style name="2.3" style="2" hAlign="Right" isBold="true"/>
+	<style name="2.4" style="2" isBold="true"/>
+	<style name="2.4.1" style="2.4" hAlign="Right"/>
+	<style name="8" style="0">
+		<box>
+			<topPen lineWidth="0.2"/>
+			<leftPen lineWidth="0.2"/>
+			<bottomPen lineWidth="0.2"/>
+			<rightPen lineWidth="0.2"/>
+		</box>
+	</style>
+	<style name="8.1" style="8">
+		<box>
+			<leftPen lineWidth="0.0"/>
+			<bottomPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="8.2" style="8">
+		<box>
+			<topPen lineWidth="0.0"/>
+			<bottomPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="8.3" style="8"/>
+	<style name="8.4" style="8">
+		<box>
+			<topPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="99" style="0" vAlign="Bottom" fontSize="6"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="STOPWATCH" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[(new java.net.URLClassLoader(
+    ([new java.net.URL("file://" + $P{SUBREPORT_DIR})]
+    ).toArray(new java.net.URL[0]), getClass().getClassLoader()
+)).loadClass("Stopwatch").newInstance().start()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="VCD" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[(new java.net.URLClassLoader(
+    ([new java.net.URL("file://" + $P{SUBREPORT_DIR})]
+    ).toArray(new java.net.URL[0]), getClass().getClassLoader()
+)).loadClass("ValueChangeDetector").newInstance()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SHOW_STOPWATCH" class="java.lang.Boolean"/>
+	<parameter name="OERP_USER" class="java.lang.String"/>
+	<parameter name="COMPANY_NAME" class="java.lang.String"/>
+	<parameter name="COMPANY_IDS" class="java.lang.String"/>
+	<parameter name="DATE_FORMAT_STRING_DEFAULT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["d MMM yyyy"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_FORMATTER_DEFAULT" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.text.SimpleDateFormat($P{DATE_FORMAT_STRING_DEFAULT})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_FORMAT_STRING_TIME_DEFAULT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{DATE_FORMAT_STRING_DEFAULT} + " HH:mm:ss"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_FORMATTER_TIME_DEFAULT" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.text.SimpleDateFormat($P{DATE_FORMAT_STRING_TIME_DEFAULT})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DECIMAL_FORMAT_STRING_DEFAULT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["#,##0.00;-#,##0.00"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DECIMAL_ROUNDING_MODE_DEFAULT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["HALF_UP"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DECIMAL_FORMATTER_DEFAULT" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.text.DecimalFormat($P{DECIMAL_FORMAT_STRING_DEFAULT})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FROM_DATE_2_YR" class="java.lang.Integer"/>
+	<parameter name="FROM_DATE_2_MO" class="java.lang.Integer"/>
+	<parameter name="FROM_DATE_2_DY" class="java.lang.Integer"/>
+	<parameter name="TO_DATE_2_YR" class="java.lang.Integer"/>
+	<parameter name="TO_DATE_2_MO" class="java.lang.Integer"/>
+	<parameter name="TO_DATE_2_DY" class="java.lang.Integer"/>
+	<parameter name="FROM_DATE_2" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date($P{FROM_DATE_2_YR} - 1900 , $P{FROM_DATE_2_MO} - 1, $P{FROM_DATE_2_DY})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TO_DATE_2" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date($P{TO_DATE_2_YR} - 1900 , $P{TO_DATE_2_MO} - 1, $P{TO_DATE_2_DY})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TODAY" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PRINTED_PAGE_FOOTER" class="java.util.Collection" isForPrompting="false">
+		<defaultValueExpression><![CDATA[[]]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COL_CAT_NAMES" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["(1, '30.03.00.00'::VARCHAR, 'Sales - Bell Pipe'::VARCHAR),"
++ "(2, '30.01.00.00'::VARCHAR, 'Sales - Pipe'::VARCHAR),"
++ "(3, '30.02.00.00'::VARCHAR, 'Sales - PE Pipe'::VARCHAR),"
++ "(4, '30.04.00.00'::VARCHAR, 'Sales - Hand Made'::VARCHAR),"
++ "(5, '30.07.00.00'::VARCHAR, 'Sales - Resale Goods'::VARCHAR),"
++ "(6, '30.05.00.00'::VARCHAR, 'Sales - Injection Fitting'::VARCHAR),"
++ "(7, '30.06.00.00'::VARCHAR, 'Sales - Solvent Cement'::VARCHAR)"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SETTERS" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{DECIMAL_FORMATTER_DEFAULT}.setRoundingMode(java.math.RoundingMode.valueOf($P{DECIMAL_ROUNDING_MODE_DEFAULT})) == null
+/* Further setter can be added by this pattern: && $P{DECIMAL_FORMATTER_DEFAULT}.setXXX() == null */
+? null
+: null]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[WITH
+ invoice_data AS (
+  SELECT
+   ai.id AS inv_id,
+   ail.account_id AS acc_id,
+   ((CASE
+      WHEN ai.type = 'out_refund'
+       THEN -1
+      ELSE 1
+     END) * ai.amount_total) AS total,
+   SUM((CASE
+         WHEN ai.type = 'out_refund'
+          THEN -1
+         ELSE 1
+        END) * ail.price_subtotal) AS subtotal,
+   SUM((CASE
+         WHEN ai.type = 'out_refund'
+          THEN -1
+         ELSE 1
+        END) * ail.quantity * pt.weight_net) AS weight,
+   ((CASE
+      WHEN ai.type = 'out_refund'
+       THEN -1
+      ELSE 1
+     END) * ai.amount_untaxed) AS untaxed,
+   ((CASE
+      WHEN ai.type = 'out_refund'
+       THEN -1
+      ELSE 1
+     END) * ai.amount_tax) AS tax
+  FROM account_invoice ai
+   INNER JOIN account_invoice_line ail
+    ON ail.invoice_id = ai.id
+   LEFT JOIN product_product p
+    ON ail.product_id = p.id
+   LEFT JOIN product_template pt
+    ON p.product_tmpl_id = pt.id
+  WHERE
+   ai.date_invoice
+    BETWEEN '$P!{FROM_DATE_2_YR}-$P!{FROM_DATE_2_MO}-$P!{FROM_DATE_2_DY}'
+     AND '$P!{TO_DATE_2_YR}-$P!{TO_DATE_2_MO}-$P!{TO_DATE_2_DY}'
+   AND ai.type IN ('out_refund', 'out_invoice')
+   AND ai.state IN ('open', 'paid')
+   AND ai.company_id IN ($P!{COMPANY_IDS})
+  GROUP BY
+   ai.id,
+   ail.account_id,
+   ai.type,
+   ai.amount_total,
+   ai.amount_untaxed,
+   ai.amount_tax
+ ),
+ tagged_invoice_data AS (
+  SELECT
+   data.inv_id,
+   col_2_cat.col_idx,
+   data.total,
+   SUM(data.subtotal) AS subtotal,
+   SUM(data.weight) AS weight,
+   data.untaxed,
+   data.tax
+  FROM (
+    SELECT DISTINCT
+     col_2_cat.col_idx,
+     aa.id AS cat_id
+    FROM UNNEST(ARRAY[$P!{COL_CAT_NAMES}]) col_2_cat (col_idx INTEGER, cat_code VARCHAR, cat_name VARCHAR)
+     INNER JOIN account_account aa
+      ON (aa.code, aa.name) = (col_2_cat.cat_code, col_2_cat.cat_name)
+   ) col_2_cat
+   INNER JOIN invoice_data data
+    ON data.acc_id = col_2_cat.cat_id
+  GROUP BY
+   data.inv_id,
+   col_2_cat.col_idx,
+   data.total,
+   data.untaxed,
+   data.tax
+ ),
+ sales_journal_records AS (
+  SELECT
+   COALESCE(col_1.inv_id,
+            col_2.inv_id,
+            col_3.inv_id,
+            col_4.inv_id,
+            col_5.inv_id,
+            col_6.inv_id,
+            col_7.inv_id) AS inv_id,
+   COALESCE(col_1.total,
+            col_2.total,
+            col_3.total,
+            col_4.total,
+            col_5.total,
+            col_6.total,
+            col_7.total,
+            0.0) AS total_amt,
+   col_1.subtotal AS subtotal_be,
+   col_1.weight AS weight_be,
+   col_2.subtotal AS subtotal_ts,
+   col_2.weight AS weight_ts,
+   col_3.subtotal AS subtotal_pe,
+   col_3.weight AS weight_pe,
+   col_4.subtotal AS subtotal_hand_made,
+   col_5.subtotal AS subtotal_res_goods,
+   col_6.subtotal AS subtotal_injection,
+   col_7.subtotal AS subtotal_solv_cement,
+   COALESCE(col_1.untaxed,
+            col_2.untaxed,
+            col_3.untaxed,
+            col_4.untaxed,
+            col_5.untaxed,
+            col_6.untaxed,
+            col_7.untaxed,
+            0.0) AS total,
+   COALESCE(col_1.tax,
+            col_2.tax,
+            col_3.tax,
+            col_4.tax,
+            col_5.tax,
+            col_6.tax,
+            col_7.tax,
+            0.0) AS tax
+  FROM
+   (SELECT *
+    FROM tagged_invoice_data data
+    WHERE col_idx = 1) col_1
+   FULL JOIN
+   (SELECT *
+    FROM tagged_invoice_data data
+    WHERE col_idx = 2) col_2
+     ON col_1.inv_id = col_2.inv_id
+   FULL JOIN
+   (SELECT *
+    FROM tagged_invoice_data data
+    WHERE col_idx = 3) col_3
+     ON col_1.inv_id = col_3.inv_id
+   FULL JOIN
+   (SELECT *
+    FROM tagged_invoice_data data
+    WHERE col_idx = 4) col_4
+     ON col_1.inv_id = col_4.inv_id
+   FULL JOIN
+   (SELECT *
+    FROM tagged_invoice_data data
+    WHERE col_idx = 5) col_5
+     ON col_1.inv_id = col_5.inv_id
+   FULL JOIN
+   (SELECT *
+    FROM tagged_invoice_data data
+    WHERE col_idx = 6) col_6
+     ON col_1.inv_id = col_6.inv_id
+   FULL JOIN
+   (SELECT *
+    FROM tagged_invoice_data data
+    WHERE col_idx = 7) col_7
+     ON col_1.inv_id = col_7.inv_id
+ )
+SELECT
+ ai.date_invoice AS date,
+ ai.number AS invoice_no,
+ ARRAY_TO_STRING(ARRAY_AGG(at.taxform_id), ', ') AS tax_invoice,
+ rp.name AS comp_name,
+ sjr.total_amt,
+ sjr.subtotal_be,
+ sjr.weight_be,
+ sjr.subtotal_ts,
+ sjr.weight_ts,
+ sjr.subtotal_pe,
+ sjr.weight_pe,
+ sjr.subtotal_hand_made,
+ sjr.subtotal_res_goods,
+ sjr.subtotal_injection,
+ sjr.subtotal_solv_cement,
+ sjr.total,
+ sjr.tax
+FROM sales_journal_records sjr
+ INNER JOIN account_invoice ai
+  ON sjr.inv_id = ai.id
+ INNER JOIN res_partner rp
+  ON ai.partner_id = rp.id
+ LEFT JOIN account_invoice_tax ait
+  ON ait.invoice_id = ai.id
+ LEFT JOIN account_taxform at
+  ON ait.taxform_id = at.id
+GROUP BY
+ ai.date_invoice,
+ ai.number,
+ rp.name,
+ sjr.inv_id,
+ sjr.total_amt,
+ sjr.subtotal_be,
+ sjr.weight_be,
+ sjr.subtotal_ts,
+ sjr.weight_ts,
+ sjr.subtotal_pe,
+ sjr.weight_pe,
+ sjr.subtotal_hand_made,
+ sjr.subtotal_res_goods,
+ sjr.subtotal_injection,
+ sjr.subtotal_solv_cement,
+ sjr.total,
+ sjr.tax
+ORDER BY
+ comp_name,
+ date,
+ invoice_no,
+ tax_invoice]]>
+	</queryString>
+	<field name="date" class="java.util.Date"/>
+	<field name="invoice_no" class="java.lang.String"/>
+	<field name="tax_invoice" class="java.lang.String"/>
+	<field name="comp_name" class="java.lang.String"/>
+	<field name="total_amt" class="java.math.BigDecimal"/>
+	<field name="total" class="java.math.BigDecimal"/>
+	<field name="tax" class="java.math.BigDecimal"/>
+	<field name="subtotal_be" class="java.math.BigDecimal"/>
+	<field name="weight_be" class="java.math.BigDecimal"/>
+	<field name="subtotal_ts" class="java.math.BigDecimal"/>
+	<field name="weight_ts" class="java.math.BigDecimal"/>
+	<field name="subtotal_pe" class="java.math.BigDecimal"/>
+	<field name="weight_pe" class="java.math.BigDecimal"/>
+	<field name="subtotal_hand_made" class="java.math.BigDecimal"/>
+	<field name="subtotal_res_goods" class="java.math.BigDecimal"/>
+	<field name="subtotal_injection" class="java.math.BigDecimal"/>
+	<field name="subtotal_solv_cement" class="java.math.BigDecimal"/>
+	<variable name="sum-comp_name-total_amt" class="java.math.BigDecimal" resetType="Group" resetGroup="comp_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{total_amt}]]></variableExpression>
+	</variable>
+	<variable name="sum-comp_name-total" class="java.math.BigDecimal" resetType="Group" resetGroup="comp_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+	</variable>
+	<variable name="sum-comp_name-tax" class="java.math.BigDecimal" resetType="Group" resetGroup="comp_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{tax}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-tax" class="java.math.BigDecimal" resetType="Group" resetGroup="global" calculation="Sum">
+		<variableExpression><![CDATA[$F{tax}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-total" class="java.math.BigDecimal" resetType="Group" resetGroup="global" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-total_amt" class="java.math.BigDecimal" resetType="Group" resetGroup="global" calculation="Sum">
+		<variableExpression><![CDATA[$F{total_amt}]]></variableExpression>
+	</variable>
+	<variable name="sum-comp_name-subtotal_be" class="java.math.BigDecimal" resetType="Group" resetGroup="comp_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtotal_be}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-subtotal_be" class="java.math.BigDecimal" resetType="Group" resetGroup="global" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtotal_be}]]></variableExpression>
+	</variable>
+	<variable name="sum-comp_name-weight_be" class="java.math.BigDecimal" resetType="Group" resetGroup="comp_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{weight_be}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-weight_be" class="java.math.BigDecimal" resetType="Group" resetGroup="global" calculation="Sum">
+		<variableExpression><![CDATA[$F{weight_be}]]></variableExpression>
+	</variable>
+	<variable name="sum-comp_name-subtotal_ts" class="java.math.BigDecimal" resetType="Group" resetGroup="comp_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtotal_ts}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-subtotal_ts" class="java.math.BigDecimal" resetType="Group" resetGroup="global" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtotal_ts}]]></variableExpression>
+	</variable>
+	<variable name="sum-comp_name-weight_ts" class="java.math.BigDecimal" resetType="Group" resetGroup="comp_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{weight_ts}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-weight_ts" class="java.math.BigDecimal" resetType="Group" resetGroup="global" calculation="Sum">
+		<variableExpression><![CDATA[$F{weight_ts}]]></variableExpression>
+	</variable>
+	<variable name="sum-comp_name-subtotal_pe" class="java.math.BigDecimal" resetType="Group" resetGroup="comp_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtotal_pe}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-subtotal_pe" class="java.math.BigDecimal" resetType="Group" resetGroup="global" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtotal_pe}]]></variableExpression>
+	</variable>
+	<variable name="sum-comp_name-weight_pe" class="java.math.BigDecimal" resetType="Group" resetGroup="comp_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{weight_pe}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-weight_pe" class="java.math.BigDecimal" resetType="Group" resetGroup="global" calculation="Sum">
+		<variableExpression><![CDATA[$F{weight_pe}]]></variableExpression>
+	</variable>
+	<variable name="sum-comp_name-subtotal_hand_made" class="java.math.BigDecimal" resetType="Group" resetGroup="comp_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtotal_hand_made}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-subtotal_hand_made" class="java.math.BigDecimal" resetType="Group" resetGroup="global" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtotal_hand_made}]]></variableExpression>
+	</variable>
+	<variable name="sum-comp_name-subtotal_res_goods" class="java.math.BigDecimal" resetType="Group" resetGroup="comp_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtotal_res_goods}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-subtotal_res_goods" class="java.math.BigDecimal" resetType="Group" resetGroup="global" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtotal_res_goods}]]></variableExpression>
+	</variable>
+	<variable name="sum-comp_name-subtotal_injection" class="java.math.BigDecimal" resetType="Group" resetGroup="comp_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtotal_injection}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-subtotal_injection" class="java.math.BigDecimal" resetType="Group" resetGroup="global" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtotal_injection}]]></variableExpression>
+	</variable>
+	<variable name="sum-comp_name-subtotal_solv_cement" class="java.math.BigDecimal" resetType="Group" resetGroup="comp_name" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtotal_solv_cement}]]></variableExpression>
+	</variable>
+	<variable name="sum-global-subtotal_solv_cement" class="java.math.BigDecimal" resetType="Group" resetGroup="global" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtotal_solv_cement}]]></variableExpression>
+	</variable>
+	<group name="global" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[true]]></groupExpression>
+		<groupFooter>
+			<band height="10" splitType="Prevent">
+				<frame>
+					<reportElement style="8.4" stretchType="RelativeToTallestObject" x="0" y="0" width="1121" height="10"/>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.4" stretchType="RelativeToTallestObject" x="228" y="0" width="89" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Total Sales Journal"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.4.1" stretchType="RelativeToTallestObject" x="317" y="0" width="66" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-global-total_amt} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-total_amt}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.4.1" stretchType="RelativeToTallestObject" x="383" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-global-subtotal_be} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-subtotal_be}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.4.1" stretchType="RelativeToTallestObject" x="447" y="0" width="53" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-global-weight_be}== null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-weight_be}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.4.1" stretchType="RelativeToTallestObject" x="500" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-global-subtotal_ts} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-subtotal_ts}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.4.1" stretchType="RelativeToTallestObject" x="564" y="0" width="53" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-global-weight_ts} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-weight_ts}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.4.1" stretchType="RelativeToTallestObject" x="617" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-global-subtotal_pe} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-subtotal_pe}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.4.1" stretchType="RelativeToTallestObject" x="681" y="0" width="53" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-global-weight_pe} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-weight_pe}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.4.1" stretchType="RelativeToTallestObject" x="734" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-global-subtotal_hand_made} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-subtotal_hand_made}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.4.1" stretchType="RelativeToTallestObject" x="798" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-global-subtotal_res_goods} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-subtotal_res_goods}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.4.1" stretchType="RelativeToTallestObject" x="862" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-global-subtotal_injection} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-subtotal_injection}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.4.1" stretchType="RelativeToTallestObject" x="926" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-global-subtotal_solv_cement} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-subtotal_solv_cement}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.4.1" stretchType="RelativeToTallestObject" x="990" y="0" width="67" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-global-total} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-total}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.4.1" stretchType="RelativeToTallestObject" x="1057" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-global-tax} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-global-tax}))]]></textFieldExpression>
+					</textField>
+				</frame>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="comp_name" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{comp_name}]]></groupExpression>
+		<groupFooter>
+			<band height="10" splitType="Prevent">
+				<frame>
+					<reportElement style="8.3" stretchType="RelativeToTallestObject" x="0" y="0" width="1121" height="10"/>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.3" stretchType="RelativeToTallestObject" x="317" y="0" width="66" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-comp_name-total_amt}== null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-comp_name-total_amt}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.3" stretchType="RelativeToTallestObject" x="383" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-comp_name-subtotal_be} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-comp_name-subtotal_be}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.3" stretchType="RelativeToTallestObject" x="447" y="0" width="53" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-comp_name-weight_be}== null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-comp_name-weight_be}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.3" stretchType="RelativeToTallestObject" x="500" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-comp_name-subtotal_ts} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-comp_name-subtotal_ts}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.3" stretchType="RelativeToTallestObject" x="564" y="0" width="53" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-comp_name-weight_ts} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-comp_name-weight_ts}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.3" stretchType="RelativeToTallestObject" x="617" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-comp_name-subtotal_pe} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-comp_name-subtotal_pe}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.3" stretchType="RelativeToTallestObject" x="681" y="0" width="53" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-comp_name-weight_pe} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-comp_name-weight_pe}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.3" stretchType="RelativeToTallestObject" x="734" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-comp_name-subtotal_hand_made} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-comp_name-subtotal_hand_made}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.3" stretchType="RelativeToTallestObject" x="798" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-comp_name-subtotal_res_goods} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-comp_name-subtotal_res_goods}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.3" stretchType="RelativeToTallestObject" x="862" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-comp_name-subtotal_injection} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-comp_name-subtotal_injection}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.3" stretchType="RelativeToTallestObject" x="926" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-comp_name-subtotal_solv_cement} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-comp_name-subtotal_solv_cement}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.3" stretchType="RelativeToTallestObject" x="990" y="0" width="67" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-comp_name-total} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-comp_name-total}))]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.3" stretchType="RelativeToTallestObject" x="1057" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[($V{sum-comp_name-tax} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($V{sum-comp_name-tax}))]]></textFieldExpression>
+					</textField>
+				</frame>
+			</band>
+		</groupFooter>
+	</group>
+	<pageHeader>
+		<band height="20" splitType="Prevent">
+			<textField isStretchWithOverflow="true">
+				<reportElement style="1" x="0" y="0" width="1150" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Company Name: " + $P{COMPANY_NAME} + "\n"
++ "Report Name: " + "Sales Journal" + "\n"
++ "Periode Sales Order" + ": " + $P{DATE_FORMATTER_DEFAULT}.format($P{FROM_DATE_2}) + " \u2013 " + $P{DATE_FORMATTER_DEFAULT}.format($P{TO_DATE_2}) + "\n"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Prevent">
+			<frame>
+				<reportElement style="8.1" stretchType="RelativeToTallestObject" x="0" y="0" width="1121" height="20"/>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.1" stretchType="RelativeToTallestObject" x="0" y="0" width="20" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA["NO"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.1.1" stretchType="RelativeToTallestObject" x="20" y="0" width="52" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA["TANGGAL"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.1.1" stretchType="RelativeToTallestObject" x="72" y="0" width="76" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA["FAKTUR NO."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.1.1" stretchType="RelativeToTallestObject" x="148" y="0" width="80" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA["FAKTUR PAJAK NO."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.1.1" stretchType="RelativeToTallestObject" x="228" y="0" width="89" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA["NAMA PERUSAHAAN"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.1.1" stretchType="RelativeToTallestObject" x="317" y="0" width="66" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA["TOTAL AMOUNT"]]></textFieldExpression>
+				</textField>
+				<frame>
+					<reportElement x="383" y="0" width="607" height="10"/>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.2" stretchType="RelativeToTallestObject" x="0" y="0" width="117" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Bell End Pipe\n(30.03)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.2" stretchType="RelativeToTallestObject" x="117" y="0" width="117" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Ts.End Pipe\n(30.01)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.2" stretchType="RelativeToTallestObject" x="234" y="0" width="117" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["PE.Pipe\n(30.02)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.2" stretchType="RelativeToTallestObject" x="351" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Hand Made\n(30.04)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.2" stretchType="RelativeToTallestObject" x="415" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Res.Goods\n(30.07)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.2" stretchType="RelativeToTallestObject" x="479" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Injection\n(30.05)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.2" stretchType="RelativeToTallestObject" x="543" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Solv.Cement\n(30.06)"]]></textFieldExpression>
+					</textField>
+				</frame>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.1.1" stretchType="RelativeToTallestObject" x="990" y="0" width="67" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA["TOTAL"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.1.1" stretchType="RelativeToTallestObject" x="1057" y="0" width="64" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA["Pajak\n(12.09)"]]></textFieldExpression>
+				</textField>
+				<frame>
+					<reportElement positionType="Float" x="383" y="10" width="607" height="10"/>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.3" stretchType="RelativeToTallestObject" x="0" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Subtotal (Rp)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.3" stretchType="RelativeToTallestObject" x="64" y="0" width="53" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Weight (Kg)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.3" stretchType="RelativeToTallestObject" x="117" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Subtotal (Rp)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.3" stretchType="RelativeToTallestObject" x="181" y="0" width="53" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Weight (Kg)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.3" stretchType="RelativeToTallestObject" x="234" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Subtotal (Rp)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.3" stretchType="RelativeToTallestObject" x="298" y="0" width="53" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Weight (Kg)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.3" stretchType="RelativeToTallestObject" x="351" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Subtotal (Rp)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.3" stretchType="RelativeToTallestObject" x="415" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Subtotal (Rp)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.3" stretchType="RelativeToTallestObject" x="479" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Subtotal (Rp)"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="2.1.3" stretchType="RelativeToTallestObject" x="543" y="0" width="64" height="10"/>
+						<textElement/>
+						<textFieldExpression><![CDATA["Subtotal (Rp)"]]></textFieldExpression>
+					</textField>
+				</frame>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="10" splitType="Prevent">
+			<frame>
+				<reportElement style="8.2" stretchType="RelativeToTallestObject" x="0" y="0" width="1121" height="10"/>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="0" y="0" width="20" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2" stretchType="RelativeToTallestObject" x="20" y="0" width="52" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{date} == null ? null : $P{DATE_FORMATTER_DEFAULT}.format($F{date})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2" stretchType="RelativeToTallestObject" x="72" y="0" width="76" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{invoice_no}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="148" y="0" width="80" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{tax_invoice}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2" stretchType="RelativeToTallestObject" x="228" y="0" width="89" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{comp_name}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="317" y="0" width="66" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{total_amt} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{total_amt})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="383" y="0" width="64" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($F{subtotal_be} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{subtotal_be}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="447" y="0" width="53" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($F{weight_be} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{weight_be}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="500" y="0" width="64" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($F{subtotal_ts} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{subtotal_ts}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="564" y="0" width="53" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($F{weight_ts} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{weight_ts}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="617" y="0" width="64" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($F{subtotal_pe} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{subtotal_pe}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="681" y="0" width="53" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($F{weight_pe} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{weight_pe}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="734" y="0" width="64" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($F{subtotal_hand_made} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{subtotal_hand_made}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="798" y="0" width="64" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($F{subtotal_res_goods} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{subtotal_res_goods}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="862" y="0" width="64" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($F{subtotal_injection} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{subtotal_injection}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="926" y="0" width="64" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($F{subtotal_solv_cement} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{subtotal_solv_cement}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="990" y="0" width="67" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($F{total} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{total}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2.2.1" stretchType="RelativeToTallestObject" x="1057" y="0" width="64" height="10"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[($F{tax} == null ? null : $P{DECIMAL_FORMATTER_DEFAULT}.format($F{tax}))]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Prevent">
+			<printWhenExpression><![CDATA[$P{PRINTED_PAGE_FOOTER}.indexOf($V{PAGE_NUMBER}) == -1
+? $P{PRINTED_PAGE_FOOTER}.add($V{PAGE_NUMBER})
+: false]]></printWhenExpression>
+			<textField evaluationTime="Report">
+				<reportElement style="99" x="0" y="0" width="538" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Printed by " + $P{OERP_USER}
++ " on " + $P{DATE_FORMATTER_TIME_DEFAULT}.format($P{TODAY})
++ ($P{SHOW_STOPWATCH}
+   ? String.format(" in %.3fs", $P{STOPWATCH}.stop().computeDeltaMs().deltaMs / 1000.0)
+   : "")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="99" x="538" y="0" width="75" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Strictly Confidential]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="99" x="1045" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER} + " of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="99" x="1125" y="0" width="25" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

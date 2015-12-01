@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+       <record id="view_taxform_form" model="ir.ui.view">
+            <field name="name">Tax Form - Pralon Forms</field>
+            <field name="model">account.taxform</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="via_account_taxform.view_taxform_form"/>
+            <field name="arch" type="xml">
+                <button name="report_taxform" position="replace">
+                    <button name="%(report_webkit_taxform)d" string="Print Taxform" type="action" icon="gtk-print" />
+                </button>
+                <button name="report_taxform_one_page" position="replace">
+                    <button name="%(report_webkit_one_taxform)d" string="Print Single Taxform" type="action" icon="gtk-print" />
+                </button>
+                <button name="report_taxform_preprinted" position="replace">
+                    <button name="%(report_webkit_taxform_preprinted)d" string="Print Preprinted Taxform" type="action" icon="gtk-print" />
+                </button>
+            </field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report auto="False"
+                id="report_webkit_quotation"
+                model="sale.order"
+                name="webkit_sales_quotation"
+                file="pralon_forms/sales/print_quotation.mako"
+                string="Quotation "
+                report_type="webkit"
+                webkit_header="pralon_preprinted_a4p"/>
+         <delete id="sale.report_sale_order" model="ir.actions.report.xml"/>
+    </data>
+</openerp>

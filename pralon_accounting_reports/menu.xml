@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<openerp>
+  <data>
+
+    <menuitem id="menu_pralon_reporting_accounting_root" name="Accounting"
+	      parent="pralon_reports.menu_pralon_reporting_root"/>
+
+  </data>
+</openerp>

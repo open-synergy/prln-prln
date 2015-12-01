@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report auto="False"
+                id="report_webkit_receipt"
+                model="account.invoice"
+                name="webkit_receipt"
+                file="pralon_forms/accounting/receipt.mako"
+                string="Receipt "
+                report_type="webkit"
+                webkit_header="via_report_webkit.ir_header_webkit_plain_a5l"/>
+
+         <report auto="False"
+                id="report_webkit_invoice"
+                model="account.invoice"
+                name="webkit_cust_invoice"
+                file="pralon_forms/accounting/customer_invoice.mako"
+                string="Customer Invoice"
+                report_type="webkit"
+                webkit_header="pralon_preprinted_a4p"/>
+         <delete id="account.account_invoices" model="ir.actions.report.xml"/>
+
+         <report auto="False"
+                id="report_webkit_one_taxform"
+                model="account.taxform"
+                name="webkit_one_taxform"
+                file="pralon_forms/accounting/account_taxform_single_page.mako"
+                string="Print Single Taxform"
+                report_type="webkit"
+                webkit_header="pralon_webkit_custom_taxform"/>
+         <delete id="account.taxform.report.one.page" model="ir.actions.report.xml"/>
+
+         <report auto="False"
+                id="report_webkit_taxform_preprinted"
+                model="account.taxform"
+                name="webkit_taxform_preprinted"
+                file="pralon_forms/accounting/account_taxform_preprinted.mako"
+                string="Print Preprinted Taxform"
+                report_type="webkit"
+                webkit_header="pralon_webkit_custom_taxform"/>
+         <delete id="account.taxform.report.preprinted" model="ir.actions.report.xml"/>
+
+         <report auto="False"
+                id="report_webkit_taxform"
+                model="account.taxform"
+                name="webkit_taxform"
+                file="pralon_forms/accounting/account_taxform.mako"
+                string="Print Taxform"
+                report_type="webkit"
+                webkit_header="pralon_webkit_custom_taxform"/>
+         <delete id="account.taxform.report" model="ir.actions.report.xml"/>
+    </data>
+</openerp>

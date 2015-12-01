@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <!-- Document type for for purchase.order -->
+        <record id="doc_type_purchase_order" model="code.decode">
+            <field name="sequence" eval="2"/>
+            <field name="code">po</field>
+            <field name="value">Tanda Tangan Purchase Order</field>
+            <field name="category" ref="via_document_signature.doc_signature_type_category"/>
+            <field name="pinned" eval="True"/>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="form_purchase_purchaseRequisition">
+            <field name="name">via_purchase_enhancement : Form Purchase Requisition</field>
+            <field name="type">form</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+            <field name="arch" type="xml">
+            	<data>
+                    <field name="company_id" groups="base.group_multi_company" widget="selection" position="after">
+                    	<field name="information_state" groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+                    	<field name="department_id" widget="selection"/>
+                    </field>
+                    <field name="name" position="attributes">
+                        <attribute name="readonly">1</attribute>
+                        <attribute name="required">0</attribute>
+                    </field>
+                </data>
+            </field>
+        </record>
+        		
+        <record model="ir.ui.view" id="tree_purchase_purchaseRequisition">
+        <field name="name">via_purchase_enhancement : Tree Purchase Requisition</field>
+        <field name="type">tree</field>
+        <field name="model">purchase.requisition</field>
+        <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_tree"/>
+        <field name="arch" type="xml">
+            <data>
+                <field name="state" position="after">
+                    <field name="information_state" groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+                </field>
+            </data>
+        </field>
+        </record>		
+    </data>
+</openerp>

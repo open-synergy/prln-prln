@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="pralon_product_enh_view_form">
+            <field name="name">Pralon Product Enhanced Excluded Product View</field>
+            <field name="type">form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/notebook/page/group/field[@name='supply_method']" position="after">
+                    <field name="excluded_product"/>
+                </xpath>
+            </field>
+        </record>	
+    </data>
+</openerp>

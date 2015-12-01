@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+  
+  <style type="text/css">
+    body{
+        width: 793.700787402px;
+        height: 1150.842519685px;
+        margin: 0px;
+        font-family:"Arial", Times, serif;
+        font-size: 12px;
+    }
+    .table_detail {
+        width: 750.771653543px;
+        height: 440.74015748px;
+        font-size: 12px;
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+  </style>
+</head>
+<%pages = len(objects)%>
+<% wrong_state = [] %>
+<% records = len(objects)%>
+<% first_page = True %>
+%for quot in objects :
+<% counter = 1 %>
+<%limit = 16%>
+<%start_from = 0%>
+<%increment = limit%>
+%if quot.state != 'draft':
+    <% wrong_state.append('%s: %s' % (quot.name, quot.state)) %>
+%else:
+    %if first_page:
+        <% first_page = False %>
+    %else:
+    ${}
+    %endif
+<% import math %>
+    <% prod_lines = len(quot.order_line) %>
+    %if prod_lines != 0:    
+    <% loop_page = int(math.ceil(float(prod_lines) / limit))%>
+    %else:
+	<% loop_page = 1 %>
+    %endif
+	%for x in range (0, loop_page):
+    %if start_from > limit:
+    <p style="page-break-after:always;"></p><br/>
+    %else:
+    ${}
+    %endif
+
+<body style="font-size:12px;font-family:Sans-Serif;">
+<table style="text-align: left;width: 750.771653543px;" cellpadding="2" cellspacing="2" height="1100">
+  <tbody>
+    <tr height="124">
+      <td colspan="3" rowspan="1" style="vertical-align: top; height: 194px;"><br>
+      </td>
+    </tr>
+    <tr height="63">
+      <td colspan="3" rowspan="1" style="vertical-align: top;">
+      <hr style="border: 1px solid black; margin-top: -10px;">
+      <p style="text-align: right;">Tangerang, 
+      %if date_order_fmt(quot.date_order):
+      ${date_order_fmt(quot.date_order) | n} 
+      %else:
+      ${}
+      %endif
+       </p>
+      <center>
+      <table class="table_title">
+        <tbody>
+          <tr>
+            <td style="font-size: 20px; font-weight: bold;">Penawaran No. : </td>
+            <td style="padding-top:7px;">${quot.name or '' | entity}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 14px;text-align:center;" colspan="2">( Masa Berlaku. : 
+            %if quot.validity == 'False':
+            ${}
+            %else:
+            ${date_order_fmt(quot.validity) or ''| n}
+            %endif
+            )</td>
+          </tr>
+        </tbody>
+      </table>
+      </center>
+      </td>
+    </tr>
+    <tr height="158">
+      <td colspan="3" rowspan="1" style="vertical-align: top;">Kepada
+Yth,<br>
+${quot.partner_order_id and quot.partner_order_id.name or '' | entity}<br>
+${quot.partner_order_id and quot.partner_order_id.street or '' | entity}<br>
+${quot.partner_order_id and quot.partner_order_id.city or 'Indonesia' |
+entity}<br>
+Up.: ${quot.partner_id and quot.partner_id.name or '' | entity}<br>
+      <br>
+      <table height="75">
+        <tbody>
+        <tr>
+            <td class="td_label_detail_header">Berdasarkan</td>
+            <td width="10">:</td>
+            <td>${quot.client_order_ref or ''|entity}</td>
+          </tr>
+          <% val = 0%>
+          %for vals in quot.order_line :
+          %if vals.delay > val:
+          <%val = vals.delay%>
+          %else:
+          %endif
+          %endfor
+          %if quot.date_order:
+          <%from datetime import datetime, timedelta %>
+          <%date = datetime.strptime(quot.date_order, "%Y-%m-%d")%>
+          <%max_date = date + timedelta(days=val)%>
+          <%res = datetime.strftime(max_date,"%Y-%m-%d")%>
+          %else:
+          %endif
+          <tr>
+            <td class="td_label_detail_header">Waktu Pengiriman</td>
+            <td width="10">:</td>
+            <td>${date_order_fmt(res)|n} ( ${int(val) or ''|entity} hari )</td>
+          </tr>
+          <tr>
+            <td class="td_label_detail_header">Tempat Pengiriman</td>
+            <td width="10">:</td>
+            <td>${quot.shop_id and quot.shop_id.name or '' | entity}</td>
+          </tr>
+          <tr>
+            <td class="td_label_detail_header">Tujuan</td>
+            <td width="10">:</td>
+            <td>${quot.partner_shipping_id and quot.partner_shipping_id.street or '' | entity}</td>
+          </tr>
+          <tr>
+            <td class="td_label_detail_header">Syarat Pembayaran</td>
+            <td width="10">:</td>
+            <td>${quot.payment_term.name or '' | entity}</td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" rowspan="1" height="158" width="94"> 
+      <table class="table_detail" style="width:100%;">
+        <tbody>
+          <tr style="border-collapse: collapse; height: 24px;">
+            <td style="border: 1px solid black; font-size: 13px; text-align: center; font-weight: bold;border-right:0px;" width="37px">NO.</td>
+            <td style="border: 1px solid black; font-size: 13px; text-align: center; font-weight: bold;border-right:0px;" width="380px">NAMA BARANG / UKURAN</td>
+            <td style="border: 1px solid black; font-size: 13px; text-align: center; font-weight: bold;border-right:0px;" width="55px" colspan="2" nowrap>KWANTUM</td>
+            <td style="border: 1px solid black; font-size: 13px; text-align: center; font-weight: bold;border-right:0px;" width="110px" nowrap>HARGA SATUAN (Rp)</td>
+            <td style="border: 1px solid black; font-size: 13px; text-align: center; font-weight: bold;border-right:0px;" width="50px" nowrap>DISKON</td>
+            <td style="border: 1px solid black; font-size: 13px; text-align: center; font-weight: bold;" width="122px">J U M L A H (Rp)</td>
+          </tr>
+          %if start_from !=0:
+          <% start_from = start_from%>
+          %else:
+          <% start_from = 0%>
+          <% count = 1%>
+          %endif
+          %for item in quot.order_line[start_from:limit]:
+          <tr style="vertical-align: text-top; max-height: 128px; height:20px;">
+            <td style="border-left: 1px solid black; border-right: 1px solid black; text-align: right; padding-right: 10px;">
+            ${count}.
+            </td>
+            <td style="border-left: 1px solid black; border-right: 1px solid black; text-align: left; padding-left: 0px;">
+            ${item.product_id and item.product_id.name_template or item.name or ''| entity} 
+            </td>
+            <td style="border-left: 1px solid black; text-align: right;width:55px;" nowrap>
+            ${formatLang(item.product_uom_qty, digits=0) or '' | entity}
+            </td>
+            <td style="border-right: 1px solid black; text-align: left;">
+            ${item.product_uom and item.product_uom.name or '' | entity}
+            </td>
+            <td style="border-left: 1px solid black; border-right: 1px solid black; text-align: right;width:100px;" nowrap>
+            ${item.price_unit or '0.00' | entity}
+            </td>
+            <td style="border-left: 1px solid black; border-right: 1px solid black; text-align: right;width:100px;" nowrap>
+            ${item.discount or '0.00' | entity}
+            <%disc = (item.price_unit * item.discount) / 100 %>
+            <%disc_price = item.price_unit - disc%>
+            </td>
+            <td style="border-left: 1px solid black; border-right: 1px solid black; text-align: right;width:80px;" nowrap>
+            ${'{:20,.2f}'.format(disc_price * item.product_uom_qty ) or''|entity}
+            </td>
+          </tr>
+          <% count +=1%> 
+          %endfor
+          <%start_from =limit%>
+        <%limit +=increment%>
+        <tr style="vertical-align: text-top; max-height: 128px;">
+            <td style="border-left: 1px solid black; border-right: 1px solid black; text-align: right; padding-right: 10px;">
+            </td>
+            <td style="border-left: 1px solid black; border-right: 1px solid black; text-align: left; padding-left: 0px;">
+            </td>
+            <td style="border-left: 1px solid black; text-align: right;width:55px;" nowrap>
+            </td>
+            <td style="border-right: 1px solid black; text-align: left;">
+            <td style="border-left: 1px solid black; border-right: 1px solid black; text-align: right;width:100px;" nowrap>
+            </td>
+            <td style="border-left: 1px solid black; border-right: 1px solid black; text-align: right;width:100px;" nowrap>
+            </td>
+            <td style="border-left: 1px solid black; border-right: 1px solid black; text-align: right;width:80px;" nowrap>
+            </td>
+          </tr>
+        <tr style="border-top: 1px solid black;" height="10">
+        <td style="border-bottom: 1px solid black; font-size: 11px; text-align: right; font-weight: bold;border-right:1px solid black;" colspan="6">Untaxed Amount</td>
+        <td style="font-size: 11px; text-align: right; font-weight: bold;">${quot.amount_untaxed or '0.00' | entity}</td>
+        </tr>
+        <tr style="border-top: 1px solid black;" height="10">
+        <td style="font-size: 11px; text-align: right; font-weight: bold;border-right:1px solid black;" colspan="6">Taxes</td>
+        <td style="font-size: 11px; text-align: right; font-weight: bold;">${quot.amount_tax or '0.00' | entity}</td>
+        </tr>
+          <tr style="border-top: 1px solid black;" height="13">
+            <td colspan="6">
+            <p><b>Total :</b>
+            %if quot.amount_total >=0.0:
+            ${amount_say(abs(quot.amount_total)) or ''|n}
+            %else:
+            ${""}
+            %endif
+            </p>
+            </td>
+            <td style="border-top: 1px solid black; border-left: 1px solid black; text-align: right; padding-right: 5px;"><b>${quot.amount_total or '' | entity}</b> </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+    <tr width="693" max-height="147px;">
+      <td style="vertical-align: bottom; width: 362px;"><br>....................<br>(Customer)
+      </td>
+      <td style="vertical-align: top;"><center>
+      <table width="300">
+        <tbody>
+          <tr>
+            <td align=right>Hormat kami,</td>
+          </tr>
+          <tr>
+            <td height="75"><br>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+          <tr align=right>
+            <td>.......................</td>
+          </tr>
+        </tbody>
+      </table></center>
+      </td>
+      <td style="vertical-align: top;"> <br>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" rowspan="1" style="vertical-align: top; max-height: 44px;">
+      <p><b>NOTE :</b> ${quot.note or '' | entity}</p>
+      </td>
+    </tr>
+    <tr max-height="76px">
+      <td colspan="3" rowspan="1" style="vertical-align: top; max-height: 31px;">
+      <p style="text-align:right;">page ${counter} of ${loop_page}</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<% counter+=1%>
+%if len(objects) != 1:
+<p style="page-break-after:always;"></p>
+%else:
+%endif
+</body>
+%endfor
+%if records > 1:
+<p style="page-break-after:always;"></p>
+<%records = records - 1 %>
+%else:
+${}
+%endif
+%endif
+%endfor
+%if wrong_state:
+<p style="page-break-after: always"></p>
+<small>
+<br/><br/><br/>
+<b>The following documents are not printed because the state is not valid:</b><br/>
+${', '.join(wrong_state)}
+</small>
+%endif
+</html>

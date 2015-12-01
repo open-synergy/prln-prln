@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <!-- CUSTOMER INVOICE -->
+        <record id="form_packings_customer_invoice" model="ir.ui.view">
+            <field name="name">History Pickings: Customer Invoice Form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Pickings">
+                    <field name="picking_ids" colspan="4" nolabel="1"/>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+    </data>
+</openerp>

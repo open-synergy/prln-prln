@@ -1,0 +1,105 @@
+<openerp>
+    <data>
+        <record id="form_saleEnhancement_saleOrder" model="ir.ui.view">
+            <field name="name">via_sale_enhancement : Form Sale Order</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<data>
+					<field colspan="4" name="order_line" nolabel="1" widget="one2many_list" position="replace">
+                        <field colspan="4" name="order_line" nolabel="1" widget="one2many_list">
+                            <form string="Sales Order Lines">
+                                <notebook>
+                                    <page string="Order Line">
+                                    <group colspan="4" col="5">
+                                        <group colspan="3" col="3">
+                                            <field colspan="3"
+                                                context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'shop':parent.shop_id, 'uom':product_uom, 'force_product_uom': True}"
+                                                name="product_id"
+                                                on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, True, parent.date_order, product_packaging, parent.fiscal_position, False, context)"/>
+                                            <field
+                                                context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'shop':parent.shop_id, 'uom':product_uom}"
+                                                name="product_uom_qty"
+                                                on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order, product_packaging, parent.fiscal_position, True, context)"/>
+                                            <field name="product_uom"
+                                                on_change="product_uom_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order, context)"
+                                                nolabel="1"/>
+                                            <field groups="product.group_uos" name="product_uos_qty"/>
+                                            <field groups="product.group_uos" name="product_uos" nolabel="1"/>
+                                            <field name="product_packaging"
+                                                context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'shop':parent.shop_id, 'uom':product_uom}" on_change="product_packaging_change(parent.pricelist_id, product_id, product_uom_qty, product_uom, parent.partner_id, product_packaging, True, context)"
+                                                domain="[('product_id','=',product_id)]" groups="base.group_extended"
+                                                colspan="3"/>
+                                        </group>
+                                        <group colspan="2" col="2">
+                                            <field name="name"/>
+                                            <field name="price_unit"/>
+                                            <group colspan="2" col="2">
+                                            <!-- field name="discount_dummy" on_change="onchange_discount(discount_1, discount_2, discount_3, discount_4, discount_5, discount_6, discount_7)"/ -->
+                                            <field name="discount" on_change="onchange_discount(discount_1, discount_2, discount_3, discount_4, discount_5, discount_6, discount_7)"/>
+                                            </group>
+                                            <separator colspan="5" string="Multi-discount"/>
+                                            <group col="8" colspan="2">
+                                                <field name="discount_1" nolabel="1" on_change="onchange_multi_discount(discount_1, discount_2, discount_3, discount_4, discount_5, discount_6, discount_7)" />
+                                                <field name="discount_2" nolabel="1" on_change="onchange_multi_discount(discount_1, discount_2, discount_3, discount_4, discount_5, discount_6, discount_7)"/>
+                                                <field name="discount_3" nolabel="1" on_change="onchange_multi_discount(discount_1, discount_2, discount_3, discount_4, discount_5, discount_6, discount_7)"/>
+                                                <field name="discount_4" nolabel="1" on_change="onchange_multi_discount(discount_1, discount_2, discount_3, discount_4, discount_5, discount_6, discount_7)"/>
+                                                <newline/>
+                                                <field name="discount_5" nolabel="1" on_change="onchange_multi_discount(discount_1, discount_2, discount_3, discount_4, discount_5, discount_6, discount_7)"/>
+                                                <field name="discount_6" nolabel="1" on_change="onchange_multi_discount(discount_1, discount_2, discount_3, discount_4, discount_5, discount_6, discount_7)"/>
+                                                <field name="discount_7" nolabel="1" on_change="onchange_multi_discount(discount_1, discount_2, discount_3, discount_4, discount_5, discount_6, discount_7)"/>
+                                            </group>
+                                        </group>
+                                        <field name="weight" invisible="1"/>
+                                        <field name="total_weight" invisible="1"/>
+                                        <!-- field name="discount" invisible="1"/ -->
+                                        <separator colspan="5" string="Notes"/>
+                                        <field colspan="5" name="notes" nolabel="1"/>
+                                        <separator colspan="5" string="Taxes"/>
+                                        <field colspan="5" name="tax_id" nolabel="1" domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]"/>
+                                        <group colspan="5" col="5" groups="base.group_extended">
+                                            <separator colspan="5" string="States"/>
+                                            <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done" statusbar_colors='{"exception":"red","cancel":"red"}'/>
+                                            <field name="invoiced"/>
+                                            <group attrs="{'invisible':[('invoiced','=',True)]}">
+                                                <button colspan="1" name="%(sale.action_view_sale_order_line_make_invoice)d" states="confirmed" string="Make Invoices" type="action" icon="terp-document-new"/>
+                                            </group>
+                                        </group>
+                                    </group>
+                                    </page>
+                                    <page groups="base.group_extended" string="Extra Info">
+                                        <field name="type"/>
+                                        <field name="delay"/>
+                                        <field name="th_weight"/>
+                                        <field name="address_allotment_id"/>
+                                        <separator colspan="4" string="Properties"/>
+                                        <field name="property_ids" colspan="4" nolabel="1"/>
+                                    </page>
+                                    <page string="History" groups="base.group_extended">
+                                        <separator colspan="4" string="Invoice Lines"/>
+                                        <field colspan="4" name="invoice_lines" nolabel="1"/>
+                                        <separator colspan="4" string="Stock Moves"/>
+                                        <field colspan="4" name="move_ids" nolabel="1" widget="many2many"/>
+                                    </page>
+                                </notebook>
+                            </form>
+                            <tree string="Sales Order Lines">
+                                <field colspan="4" name="name"/>
+                                <field name="product_uom_qty" string="Qty(UoM)"/>
+                                <field name="product_uom" string="UoM"/>
+                                <field groups="product.group_uos" name="product_uos_qty" string="Qty(UoS)"/>
+                                <field groups="product.group_uos" name="product_uos" string="UoS"/>
+                                <field name="discount"/>
+                                <field name="price_unit"/>
+                                <field name="price_subtotal"/>
+                                <field name="weight"/>
+                                <field name="total_weight"/>
+                            </tree>
+                        </field>
+                    </field>
+                </data>
+            </field>
+        </record>
+    </data>
+</openerp>

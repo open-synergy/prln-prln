@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="stock_card" language="groovy" pageWidth="842" pageHeight="595" whenNoDataType="AllSectionsNoDetail" columnWidth="806" leftMargin="18" rightMargin="18" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true">
+	<property name="ireport.zoom" value="1.948717100000035"/>
+	<property name="ireport.x" value="528"/>
+	<property name="ireport.y" value="83"/>
+	<style name="0" isBlankWhenNull="true"/>
+	<style name="1" style="0" hAlign="Left" fontSize="10" isBold="true">
+		<box bottomPadding="20"/>
+	</style>
+	<style name="2" style="0" hAlign="Left" fontSize="8" isBold="true">
+		<box bottomPadding="10"/>
+	</style>
+	<style name="3" style="0" hAlign="Left" fontSize="8">
+		<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+			<topPen lineWidth="0.2"/>
+			<leftPen lineWidth="0.2"/>
+			<bottomPen lineWidth="0.2"/>
+			<rightPen lineWidth="0.2"/>
+		</box>
+		<paragraph leftIndent="2" rightIndent="2"/>
+	</style>
+	<style name="3.1" style="3" isBold="true">
+		<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0"/>
+	</style>
+	<style name="3.1.1" style="3.1" hAlign="Center">
+		<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0"/>
+		<paragraph rightIndent="2"/>
+	</style>
+	<style name="3.1.2" style="3.1" hAlign="Right"/>
+	<style name="3.2" style="3" hAlign="Right"/>
+	<style name="3.2.1" style="3.2" isItalic="true"/>
+	<style name="99" style="0" vAlign="Bottom" fontSize="6"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="STOPWATCH" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[(new java.net.URLClassLoader(
+    ([new java.net.URL("file://" + $P{SUBREPORT_DIR})]
+    ).toArray(new java.net.URL[0]), getClass().getClassLoader()
+)).loadClass("Stopwatch").newInstance().start()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="VCD" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[(new java.net.URLClassLoader(
+    ([new java.net.URL("file://" + $P{SUBREPORT_DIR})]
+    ).toArray(new java.net.URL[0]), getClass().getClassLoader()
+)).loadClass("ValueChangeDetector").newInstance()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SHOW_STOPWATCH" class="java.lang.Boolean"/>
+	<parameter name="OERP_USER" class="java.lang.String"/>
+	<parameter name="COMPANY_NAME" class="java.lang.String"/>
+	<parameter name="DATE_FORMAT_STRING_DEFAULT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["d MMM yyyy"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_FORMATTER_DEFAULT" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.text.SimpleDateFormat($P{DATE_FORMAT_STRING_DEFAULT})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_FORMAT_STRING_TIME_DEFAULT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{DATE_FORMAT_STRING_DEFAULT} + " HH:mm:ss"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_FORMATTER_TIME_DEFAULT" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.text.SimpleDateFormat($P{DATE_FORMAT_STRING_TIME_DEFAULT})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DECIMAL_FORMAT_STRING_DEFAULT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["#,##0.00;-#,##0.00"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DECIMAL_ROUNDING_MODE_DEFAULT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["HALF_UP"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DECIMAL_FORMATTER_DEFAULT" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.text.DecimalFormat($P{DECIMAL_FORMAT_STRING_DEFAULT})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TODAY" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PRINTED_PAGE_FOOTER" class="java.util.Collection" isForPrompting="false">
+		<defaultValueExpression><![CDATA[[]]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SETTERS" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{DECIMAL_FORMATTER_DEFAULT}.setRoundingMode(java.math.RoundingMode.valueOf($P{DECIMAL_ROUNDING_MODE_DEFAULT})) == null
+/* Further setter can be added by this pattern: && $P{DECIMAL_FORMATTER_DEFAULT}.setXXX() == null */
+? null
+: null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TO_DATE" class="java.util.Date"/>
+	<parameter name="SCR_LOCATION_IDS" class="java.lang.String"/>
+	<parameter name="PROD_IDS" class="java.lang.String"/>
+	<parameter name="LOCATION_NAMES" class="java.lang.String"/>
+	<parameter name="PROD_NAMES" class="java.lang.String"/>
+	<parameter name="FROM_DATE_2_MO" class="java.lang.String"/>
+	<parameter name="FROM_DATE_2_DY" class="java.lang.String"/>
+	<parameter name="TO_DATE_2_YR" class="java.lang.String"/>
+	<parameter name="TO_DATE_2_MO" class="java.lang.String"/>
+	<parameter name="TO_DATE_2_DY" class="java.lang.String"/>
+	<parameter name="FROM_DATE_2_YR" class="java.lang.String"/>
+	<parameter name="RPT_SQL" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="COMPANY_IDS" class="java.lang.String"/>
+	<parameter name="DEC_FORMAT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["#,##0.00;-#,##0.00"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DECIMAL_FORMATTER_MODIF" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.text.DecimalFormat($P{DEC_FORMAT})]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[$P!{RPT_SQL}]]>
+	</queryString>
+	<field name="_move_date" class="java.util.Date"/>
+	<field name="_ref" class="java.lang.String"/>
+	<field name="_origin" class="java.lang.String"/>
+	<field name="_ctr_name" class="java.lang.String"/>
+	<field name="_type" class="java.lang.String"/>
+	<field name="_this_name" class="java.lang.String"/>
+	<field name="_move_qty_in" class="java.math.BigDecimal"/>
+	<field name="_move_weight_in" class="java.math.BigDecimal"/>
+	<field name="_running_total" class="java.math.BigDecimal"/>
+	<field name="_product_name" class="java.lang.String"/>
+	<field name="_product_code" class="java.lang.String"/>
+	<field name="_uom" class="java.lang.String"/>
+	<field name="_move_qty_out" class="java.math.BigDecimal"/>
+	<field name="_move_weight_out" class="java.math.BigDecimal"/>
+	<field name="_partner_name" class="java.lang.String"/>
+	<field name="_move_weight" class="java.math.BigDecimal"/>
+	<field name="_running_total_weight" class="java.math.BigDecimal"/>
+	<field name="_move_qty" class="java.math.BigDecimal"/>
+	<variable name="SumQIN" class="java.math.BigDecimal" resetType="Group" resetGroup="by products" calculation="Sum">
+		<variableExpression><![CDATA[$F{_move_qty_in}]]></variableExpression>
+	</variable>
+	<variable name="SumQOUT" class="java.math.BigDecimal" resetType="Group" resetGroup="by products" calculation="Sum">
+		<variableExpression><![CDATA[$F{_move_qty_out}]]></variableExpression>
+	</variable>
+	<variable name="SumWIN" class="java.math.BigDecimal" resetType="Group" resetGroup="by products" calculation="Sum">
+		<variableExpression><![CDATA[$F{_move_weight_in}]]></variableExpression>
+	</variable>
+	<variable name="SumWOUT" class="java.math.BigDecimal" resetType="Group" resetGroup="by products" calculation="Sum">
+		<variableExpression><![CDATA[$F{_move_weight_out}]]></variableExpression>
+	</variable>
+	<group name="by_location">
+		<groupExpression><![CDATA[$F{_this_name}]]></groupExpression>
+	</group>
+	<group name="by products">
+		<groupExpression><![CDATA[$F{_product_name}]]></groupExpression>
+		<groupHeader>
+			<band height="24">
+				<textField isStretchWithOverflow="true">
+					<reportElement style="2" stretchType="RelativeToTallestObject" x="0" y="1" width="364" height="20"/>
+					<textElement>
+						<font size="7"/>
+						<paragraph spacingBefore="15" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Location: " + $F{_this_name} + "\n"
++ "Product: " + $F{_product_code} + " " + $F{_product_name} + "\n"
++ "UoM: " + $F{_uom}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="24">
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.1" stretchType="RelativeToTallestObject" x="0" y="0" width="21" height="24"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["No"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.1" stretchType="RelativeToTallestObject" x="21" y="0" width="46" height="24"/>
+					<textElement verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Date"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.1" stretchType="RelativeToTallestObject" x="67" y="0" width="79" height="24"/>
+					<textElement verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Reference"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.1" stretchType="RelativeToTallestObject" x="225" y="0" width="111" height="24"/>
+					<textElement verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Partner"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.1" stretchType="RelativeToTallestObject" x="146" y="0" width="79" height="24"/>
+					<textElement verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Origin"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.1" stretchType="RelativeToTallestObject" x="361" y="12" width="112" height="12"/>
+					<textElement>
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["From/To"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.1.1" stretchType="RelativeToTallestObject" x="336" y="0" width="361" height="12"/>
+					<textElement>
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Moves"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.1" stretchType="RelativeToTallestObject" x="336" y="12" width="25" height="12"/>
+					<textElement>
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Type"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.1.2" stretchType="RelativeToTallestObject" x="638" y="12" width="59" height="12"/>
+					<textElement>
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Weight OUT"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.1.2" stretchType="RelativeToTallestObject" x="473" y="12" width="55" height="12"/>
+					<textElement>
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Qty IN"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.1.2" stretchType="RelativeToTallestObject" x="528" y="12" width="55" height="12"/>
+					<textElement>
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Qty OUT"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.1.1" stretchType="RelativeToTallestObject" x="697" y="0" width="110" height="12"/>
+					<textElement>
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Balance"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.1.2" stretchType="RelativeToTallestObject" x="752" y="12" width="55" height="12"/>
+					<textElement>
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Weight"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.1.2" stretchType="RelativeToTallestObject" x="697" y="12" width="55" height="12"/>
+					<textElement>
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Qty"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.1.2" stretchType="RelativeToTallestObject" x="583" y="12" width="55" height="12"/>
+					<textElement>
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Weight IN"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="10">
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.2" stretchType="RelativeToTallestObject" x="752" y="0" width="55" height="10"/>
+					<textElement>
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{_move_weight} == null ? null : $P{DECIMAL_FORMATTER_MODIF}.format($F{_move_weight}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.2" stretchType="RelativeToTallestObject" x="697" y="0" width="55" height="10"/>
+					<textElement>
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{_move_qty} == null ? null : $P{DECIMAL_FORMATTER_MODIF}.format($F{_move_qty}))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.2.1" stretchType="RelativeToTallestObject" x="0" y="0" width="697" height="10"/>
+					<textElement>
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Beginning Balance"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="10">
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.2" stretchType="RelativeToTallestObject" x="473" y="0" width="55" height="10"/>
+					<textElement>
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SumQIN} == null
+? null
+ : $P{DECIMAL_FORMATTER_MODIF}.format($V{SumQIN})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.2" stretchType="RelativeToTallestObject" x="528" y="0" width="55" height="10"/>
+					<textElement>
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SumQOUT} == null
+? null
+ : $P{DECIMAL_FORMATTER_MODIF}.format($V{SumQOUT})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.2" stretchType="RelativeToTallestObject" x="583" y="0" width="55" height="10"/>
+					<textElement>
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SumWIN} == null
+? null
+ : $P{DECIMAL_FORMATTER_MODIF}.format($V{SumWIN})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.2" stretchType="RelativeToTallestObject" x="638" y="0" width="59" height="10"/>
+					<textElement>
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SumWOUT} == null
+? null
+ : $P{DECIMAL_FORMATTER_MODIF}.format($V{SumWOUT})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.2" stretchType="RelativeToTallestObject" x="0" y="0" width="473" height="10"/>
+					<textElement textAlignment="Center">
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total Moves"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.2" stretchType="RelativeToTallestObject" x="697" y="0" width="55" height="10"/>
+					<textElement>
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.2" stretchType="RelativeToTallestObject" x="752" y="0" width="55" height="10"/>
+					<textElement>
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="11">
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.2.1" stretchType="RelativeToTallestObject" x="0" y="0" width="697" height="10"/>
+					<textElement>
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Ending Balance"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.2" stretchType="RelativeToTallestObject" x="697" y="0" width="55" height="10"/>
+					<textElement>
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{_move_qty} == null
+? null
+ : $P{DECIMAL_FORMATTER_MODIF}.format($F{_move_qty})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="3.2" stretchType="RelativeToTallestObject" x="752" y="0" width="55" height="10"/>
+					<textElement>
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{_move_weight} == null ? null : $P{DECIMAL_FORMATTER_MODIF}.format($F{_move_weight}))]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="date">
+		<groupExpression><![CDATA[$F{_move_date}]]></groupExpression>
+	</group>
+	<pageHeader>
+		<band height="59" splitType="Prevent">
+			<textField isStretchWithOverflow="true">
+				<reportElement style="1" x="0" y="0" width="380" height="36"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Company Name: " + $P{COMPANY_NAME} + "\n"
++ "Report Name: " + "Stock Card" + "\n"
++ "Period: "+ $P{FROM_DATE_2_DY} + "-" + $P{FROM_DATE_2_MO} + "-"
++ $P{FROM_DATE_2_YR} +" to "+ $P{TO_DATE_2_DY} + "-" + $P{TO_DATE_2_MO}+ "-" +
+$P{TO_DATE_2_YR}+"\n"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="1" x="380" y="36" width="65" height="23"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Products : "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="1" x="0" y="36" width="65" height="23"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Locations: "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="1" x="445" y="36" width="357" height="23" isPrintInFirstWholeBand="true"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{PROD_NAMES}.length()>50)? $P{PROD_NAMES}.substring(0,50)+" ...." : $P{PROD_NAMES}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement style="1" x="65" y="36" width="315" height="23">
+					<property name="net.sf.jasperreports.text.truncate.at.char" value="true"/>
+				</reportElement>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{LOCATION_NAMES}.length()>50)? $P{LOCATION_NAMES}.substring(0,50)+" ...." :$P{LOCATION_NAMES}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="10" splitType="Prevent">
+			<printWhenExpression><![CDATA[($F{_type} != "Ending Balance") &&($F{_type} != "Beginning Balance")]]></printWhenExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="3" stretchType="RelativeToTallestObject" x="21" y="0" width="46" height="10"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{_move_date} == null ? null : new SimpleDateFormat("dd-MM-yyyy").format($F{_move_date})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="3" stretchType="RelativeToTallestObject" x="67" y="0" width="79" height="10"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{_ref}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="3" stretchType="RelativeToTallestObject" x="225" y="0" width="111" height="10"/>
+				<textElement>
+					<font size="7"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{_partner_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="3" stretchType="RelativeToTallestObject" x="336" y="0" width="25" height="10"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{_type}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="3.2" stretchType="RelativeToTallestObject" x="473" y="0" width="55" height="10"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{_move_qty_in} == null ? null : $P{DECIMAL_FORMATTER_MODIF}.format($F{_move_qty_in})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="3.2" stretchType="RelativeToTallestObject" x="528" y="0" width="55" height="10"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{_move_qty_out} == null ? null : $P{DECIMAL_FORMATTER_MODIF}.format($F{_move_qty_out}))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="3.2" stretchType="RelativeToTallestObject" x="583" y="0" width="55" height="10"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{_move_weight_in} == null ? null : $P{DECIMAL_FORMATTER_MODIF}.format($F{_move_weight_in}))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="3.2" stretchType="RelativeToTallestObject" x="638" y="0" width="59" height="10"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{_move_weight_out} == null ? null : $P{DECIMAL_FORMATTER_MODIF}.format($F{_move_weight_out}))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="3.2" stretchType="RelativeToTallestObject" x="697" y="0" width="55" height="10"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{_running_total} == null ? null : $P{DECIMAL_FORMATTER_MODIF}.format($F{_running_total}))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="3" stretchType="RelativeToTallestObject" x="0" y="0" width="21" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{by products_COUNT}-1]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="3.2" stretchType="RelativeToTallestObject" x="752" y="0" width="55" height="10"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{_running_total_weight} == null ? null : $P{DECIMAL_FORMATTER_MODIF}.format($F{_running_total_weight}))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement style="3" stretchType="RelativeToTallestObject" x="146" y="0" width="79" height="10"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{_origin}.length()>16)? $F{_origin}.substring(0,16)+" ...." :$F{_origin}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="3" stretchType="RelativeToTallestObject" x="361" y="0" width="112" height="10"/>
+				<textElement>
+					<font size="7"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{_ctr_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Prevent">
+			<printWhenExpression><![CDATA[$P{PRINTED_PAGE_FOOTER}.indexOf($V{PAGE_NUMBER}) == -1
+? $P{PRINTED_PAGE_FOOTER}.add($V{PAGE_NUMBER})
+: false]]></printWhenExpression>
+			<textField evaluationTime="Report">
+				<reportElement style="99" x="0" y="0" width="364" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Printed by " + $P{OERP_USER}
++ " on " + $P{DATE_FORMATTER_TIME_DEFAULT}.format($P{TODAY})
++ ($P{SHOW_STOPWATCH}
+   ? String.format(" in %.3fs", $P{STOPWATCH}.stop().computeDeltaMs().deltaMs / 1000.0)
+   : "")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="99" x="364" y="0" width="75" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Strictly Confidential]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="99" x="697" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER} + " of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="99" x="777" y="0" width="25" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

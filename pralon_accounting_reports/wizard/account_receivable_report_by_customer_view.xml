@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<openerp>
+  <data>
+
+    <!-- <record id="form_view_pralon_accounting_arrbc" -->
+    <!--         model="ir.ui.view"> -->
+    <!--   <field name="name">account_receivable_report_by_customer (Form View)</field> -->
+    <!--   <field name="model">via.jasper.report</field> -->
+    <!--   <field name="type">form</field> -->
+    <!--   <field name="inherit_id" ref="via_jasper_report_utils.via_jasper_report_main_form_view"/> -->
+    <!--   <field name="arch" type="xml"> -->
+    <!--   </field> -->
+    <!-- </record> -->
+
+    <record id="action_pralon_accounting_arrbc"
+            model="ir.actions.act_window">
+      <field name="name">Account Receivable Report By Customer</field>
+      <field name="res_model">via.jasper.report</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">form</field>
+      <field name="view_id" ref="via_jasper_report_utils.via_jasper_report_main_form_view"/>
+      <field name="context">{'via_jasper_report_utils.rpt_name': 'Account Receivable Report By Customer'}</field>
+      <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_pralon_accounting_arrbc"
+              name="Account Receivable Report By Customer"
+              parent="menu_pralon_reporting_accounting_root"
+              action="action_pralon_accounting_arrbc"
+              groups="account.group_account_manager"/>
+  </data>
+</openerp>
